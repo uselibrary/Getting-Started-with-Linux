@@ -166,15 +166,29 @@ apt purge vim -y
 
 ### 2.1 连接SSH的软件和相关操作
 
-SSH软件有开源的和不开源的，有付费的和免费的，整理除了一个常见SSH客户端的表格，平台为Windows。macos、Linux和2021年以后的windows 10，都自带SSH功能，这里就不讨论了。目前自用xshell+mobaxterm两个。
+SSH软件有开源的和不开源的，有付费的和免费的，整理了一个常见SSH客户端（Windows平台）的对比表格和相关信息。其实在2021年，macos、Linux和windows 10都自带SSH功能，这里先不讨论。个人目前主用mobaxterm，偶尔使用xshell。
 
-| 名称       | 免费与否              | 备注                                                   |
-| ---------- | --------------------- | ------------------------------------------------------ |
-| Xshell     | 官网的家庭/教育版免费 | 功能简单，启动速度快，传输文件需要配合xftp             |
-| Mobaxterm  | 个人免费              | 功能极其完整，但是有点完整过头了                       |
-| finalshell | 可选免费              | 国人开发，所以很容易上手，但是开通功能需要付费         |
-| putty      | 免费                  | 老牌SSH客户端，但是部分操作反人类，不建议              |
-| electerm   | 免费                  | 可以通过GitHub同步保存信息，基于electron开发的而占内存 |
+
+
+| 名称       | 免费与否      | 下载地址                                                     |
+| ---------- | ------------- | ------------------------------------------------------------ |
+| Xshell     | 家庭/学校免费 | https://www.netsarang.com/zh/free-for-home-school/           |
+| MobaXterm  | 家庭版免费    | https://mobaxterm.mobatek.net/download.html                  |
+| FinalShell | 基础功能免费  | https://www.hostbuf.com/t/988.html                           |
+| electerm   | 免费+开源     | https://github.com/electerm/electerm/releases                |
+| PuTTY      | 免费+开源     | https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html |
+
+
+
+Xshell：传播广泛，自带中文，个人使用完全免费，但是会话窗口限制最多只能打开四个SSH连接，再多之后就会自动新建会话窗口了，传输文件需要配合Xftp才行。目前国区被臭名昭著的思杰马克丁代理了，如需使用，请前往官网下载，在输入邮件和姓名后，会收到一封邮件，邮件里面给出下载连接。
+
+MobaXterm：只有英文版本，偶尔会反应慢半拍，除此之外没缺点。功能极其强大，传输文件、性能监控、串口通信、X11支持、IP检测、宏、WSL、远程桌面等，能想到的功能都有，而且个人使用免费。
+
+FinalShell：国人开发，所以本地化很好，全中文，日常需要的功能也都有。有一些进阶功能需要付费，也可以云端保存SSH账号，虽然也是付费功能。缺点的话，和MobaXterm一样，JAVA写的东西，总是让人觉得慢半拍。
+
+electerm：日常所需功能都有，完全开源和免费，还可以通过GitHub实现免费的云端保存SSH账号功能，适合自己折腾和魔改。基于electron开发的，从而实现了跨平台，Windows、Mac和Linux都有客户端，不过缺点也显而易见，electron本质上是个浏览器，占内存和硬盘空间。
+
+PuTTY：由Simon Tatham开发和维护的，老牌中的老牌，但是缺少人性化设置，不推荐。
 
 
 
