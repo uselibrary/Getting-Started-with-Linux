@@ -307,11 +307,80 @@ umount /mnt/usb
 
 
 
-## 4 Shell入门
+## 4 Shell/Dash入门
+
+让人头大，Shell本身就能写一本书了，少说得有300页！这里面夹杂着从Unix开始的一大堆事情，shell的发展，bash和dash的区别与联系，本身的命令，调用系统的命令，交互方式。累了，姑且先把它当成一堆命令拼凑起来的脚本吧。
+
+还是写个例子，简单介绍一下实际内容，等以后有时间了再继续补充。比如我们想写一个查看CPU和内存使用率的脚本：
+
+```shell
+#!/bin/bash
+
+echo "which useage do you want to konw?"
+echo "1 for CPU, 2 for RAM"
+read choice
+
+if [ $choice -eq 1 ]
+then
+   echo "CPU usage"
+   grep 'cpu ' /proc/stat | awk '{usage=($2+$4)*100/($2+$4+$5)} END {print usage "%"}'
+elif [ $choice -eq 2 ]
+then
+   echo "RAM usage"
+   free -m | grep Mem | awk '{print ($3/$2)*100 "%"}'
+else
+   echo "WRONG INPUT"
+fi
+```
+
+细说每一行内容
+
+`#!/bin/bash`是指定此文件由/bin下面的bash来执行，在Debian 11里面，bash其实是dash，别问dash是什么，就写bash，天王老子来了也写bash
+
+`echo "which useage do you want to konw?"`是输出冒号内的文字
+
+````
+echo "1 for CPU, 2 for RAM"
+read choice
+````
+
+把输入内容赋值给`choice`这个变量，即数字1或者2
+
+```
+if [ ... ]
+then
+	...
+	...
+elif [ ... ]
+then
+	...
+	...
+else
+	...
+fi
+```
+
+这是一个if...elif...else的判断语句，先经过两次判断，如果都不能成功，那就执行最后一行。
+
+`$choice -eq 1`把刚才的`choice`这个变量和数字1对比，注意，要有`$`才代表变量，不然就默认是文字，`-eq`是等于的意思。判断是否等于1，是的话就给出CPU使用量，如果不等于1，那就继续判断是否等于2，是的话就给出RAM使用量，如果不等于2，那就输出错误提醒，然后结束。
 
 
 
 ## 5 Crontab定时任务
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
