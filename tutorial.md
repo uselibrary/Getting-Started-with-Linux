@@ -335,7 +335,9 @@ fi
 
 细说每一行内容
 
-`#!/bin/bash`是指定此文件由/bin下面的bash来执行，在Debian 11里面，bash其实是dash，别问dash是什么，就写bash，天王老子来了也写bash
+`#!/bin/bash`是指定此文件由/bin下面的bash这个程序来执行。
+
+在Debian 11里面，bash其实是dash，别问dash是什么，就写bash，天王老子来了也写bash。Bash全称是GNU Bourne-Again Shell，bash被从NetBSD（一个Unix的分支）上移植到Debian上，所以叫dash (Debian Almquist Shell)。
 
 `echo "which useage do you want to konw?"`是输出冒号内的文字
 
@@ -344,7 +346,7 @@ echo "1 for CPU, 2 for RAM"
 read choice
 ````
 
-把输入内容赋值给`choice`这个变量，即数字1或者2
+把输入内容赋值给`choice`这个变量，即数字1或者2。`rcho -p "1 for CPU, 2 for RAM" choice`也可以实现相同功能。
 
 ```
 if [ ... ]
@@ -362,7 +364,15 @@ fi
 
 这是一个if...elif...else的判断语句，先经过两次判断，如果都不能成功，那就执行最后一行。
 
-`$choice -eq 1`把刚才的`choice`这个变量和数字1对比，注意，要有`$`才代表变量，不然就默认是文字，`-eq`是等于的意思。判断是否等于1，是的话就给出CPU使用量，如果不等于1，那就继续判断是否等于2，是的话就给出RAM使用量，如果不等于2，那就输出错误提醒，然后结束。
+`$choice -eq 1`把刚才的`choice`这个输入变量和数字1对比，注意，要有`$`才代表变量，不然就默认是文字，`-eq`是等于的意思。判断是否等于1，是的话就给出CPU使用量，如果不等于1，那就继续判断是否等于2，是的话就给出RAM使用量，如果不等于2，那就输出错误提醒，然后结束。`grep`是抓取有关键词的那一行，`$2`是这一行的第几个内容，如下：
+
+![grep](images\grep.jpg)
+
+`grep Mem`抓取到了第二行，即真实内存这一行，`$2`是内存总量，`$3`是已经使用了的内存，因此`($3/$2)*100`就是已经使用了百分之多少的内存，
+
+
+
+
 
 
 
