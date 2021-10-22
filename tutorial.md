@@ -372,29 +372,17 @@ fi
 
 
 
-
-
-
-
 ## 5 Crontab定时任务
 
+Crontab用于定时任务，比如设定周五晚上运行脚本备份网站，又或者每分钟检查一下CPU使用率等。但初次之外，crontab还有个`@reboot`功能，即可以在系统启动的时候自动运行指定程序。
 
+推荐`crontab -e`，其中的`-e`是指当前用户，不建议直接使用`crontab`。首次运行`crontab -e`的时候，会让选择使用何种编辑工具，这个随便，nano和vim basic都行，什么顺手和习惯就用什么。
 
+![crontab_eg](images\crontab_eg.jpg)
 
+如上图，将每隔15分钟，就会使用位于`usr/bin`中的`python3`运行位于`/usr/local/weather`中的`weather.py`程序。前五个星号其实是设置的时间，推荐去https://crontab.guru/这里直接设置时间（如下图）。第一个星号是分钟，第二个星号是小时，第三个星号是天，第四个星号是月份，第五个星号是每周的第几天。
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+![crontab_set](images\crontab_set.jpg)
 
 
 
