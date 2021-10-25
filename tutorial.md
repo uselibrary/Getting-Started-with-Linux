@@ -392,13 +392,13 @@ Crontab用于定时任务，比如设定周五晚上运行脚本备份网站，�
 
 上述已经简单的减少了root来源，由于root的权限太高，以至于在实际使用中发现并不安全，而且作为一个初始目的是多用户多终端的操作系统，Linux主要操作都不需要发生在root用户上的。所以这里就有了user这个角色，如果用户多了起来，为了便于管理，也会把某些用户分组，就有了group的概念。以下演示使用root用户新建一个user用户并进入此用户：
 
-![adduser](images\adduser.jpg)
+![adduser](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/adduser.jpg)
 
 如图所示，`adduser mjj`为新建一个叫做mjj的用户，由于此前并没有除了root之外的用户，所以会使用这个名字作为group/组的名字，并且在/home文件夹里面生成一个mjj文件夹，即mjj的”桌面“。所以输入两次密码，之后会问一堆问题，都是例行的，一路enter就好，最后会问一下信息对不对，输入y就完成添加新用户了。
 
 但此时，mjj这个用户的权限是很小的，四舍五入等于没有，连某些文件夹都不能进去更别说执行软件了。使用`su mjj`切换到mjj用户中，可以在终端中看到已经从root@rn变成了mjj@rn，rn是这台服务器的名字，即为某某在rn这台服务器上。查看以下root文件夹下有些什么东西，结果发现权限不够而被拒绝访问/Permission denied。
 
-![sudo](images\sudo.jpg)
+![sudo](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/sudo.jpg)
 
 所以我们要给一个能够临时使用root权限的能力，这被称为`sudo`。
 
@@ -410,7 +410,7 @@ usermod -aG sudo mjj ##给予mjj用户sudo权限
 
 此时，我们再切换到mjj用户上，在刚才的命令前加上sudo，临时获取root权限，就可以查看了：
 
-![sudo_root](images\sudo_root.jpg)
+![sudo_root](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/sudo_root.jpg)
 
 在用户首次使用root权限的时候，系统会提示三个准则，也请谨记：
 
@@ -432,29 +432,100 @@ chown的全称是change owner，是用于设置文件所有权的。由于`归�
 
 ## 7 Systemd入门和配置
 
-### 7.1 进程守护
+### 7.1 开机自启和进程守护
+
+Systemd是由Redhat家的Lennart Poettering开发的，其人以创造性和不靠谱闻名，Systemd在最开始的时候，和init相比没有明显优势，经过多次迭代才有了今天的稳定性和适用性，现在就让老旧的init进入历史垃圾桶吧。事实上，在Linux系统启动的时候，一旦kernel运行了，Systemd就会跟随启动，之后由Systemd唤醒并维护各个程序的正常运行，比如网卡，显示器，SSH服务等。你会在`/etc/systemd/system/`文件夹中发现一个叫做`sshd.service`的文件，并且还是enable模式的，这意味着SSH是`开机自启`的，并且系统会一直监控这这个程序，如果程序崩溃，系统会尝试自动重启它以确保能够正常运行。
+
+以著名的内网穿透`frp`的服务器端的Systemd文件为例（下节将详细介绍如何搭建frp），将`frps.service`放到`/etc/systemd/system/`文件夹中，使用以下命令
+
+```shell
+systemctl enable frps.service
+systemctl start frps.service
+systemctl status frps.service
+systemctl restart frps.service
+```
+
+systemctl是systemd在系统中的程序名字，enable是指让这个程序能够开机自启，start为让程序现就运行，status是查看这个程序现在的状态，restart是程序程序。
+
+当然，我们也可以自己写systemd的service文件，这里以 https://github.com/cnsilvan/UnblockNeteaseMusic 解锁网易云音乐的程序做参考
+
+```
+[Unit]
+Description=UnblockNeteaseMusic
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/usr/local/UnblockNeteaseMusic
+ExecStart=/usr/bin/node app.js -e http://music.163.com -s -p 8888
+RestartPreventExitStatus=23
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+一共分为三组，分别为Unit，Service和Install。Unit是这个服务的名称，示例中为`UnblockNeteaseMusic`而`After`和`Wants`指明的`network.target`意味希望这个程序在网络服务启动后再启动，毕竟是个网络功能，不能还没有网就启动了。Service是核心部分，`Type`指定了类型,`Simple`是默认的类型，发现有网了就启动。此外，常见的还有`fork`和`idle`，前者意味着程序依赖于另外一个程序的运行，通常还会配置`PIDFile`，后者是等系统空闲了再启动，属于一点都不急的。`WorkingDirectory`是工作目录，`ExecStart`是执行的命令，实例中，是用位于`/usr/bin/`的nodejs执行位于工作目录的`app.js`这个文件，并且还带了参数`http://music.163.com -s -p 8888`。`RestartPreventExitStatus`是指如果报错信息为`23`则不会再重启了，具体报错信息是运行的程序决定的。`Restart=always`指只要不是23的报错信息，那就一旦服务停了，Systemd就会去重启。最后一部分，Install中的`WantedBy=multi-user.target`指网络服务已经正常启动，也可以让用户登录了，但是并没有开启GUI服务，这个部分不用去探究。
+
+
 
 ### 7.2 Timer代替Crontab
 
+我写了一个自动登录百度贴吧并签到的shell脚本，想每天都运行一次帮我拿积分，但是又不想用crontab实现定时任务，那么Systemd也是由类似的功能的，名字叫做Timer，即定时器。这个功能需要两个文件，比较繁琐。
+
+需要再`/etc/systemd/system/`中写两份配置文件，`tieba.service`和`tieba.timer`，前缀必须一样，后缀不同。
+
+前者很简单，就是个脚本（如下），名字和程序的路径：
+
+```
+[Unit]
+Description=Tieba Sign
+
+[Service]
+ExecStart=/home/tieba.sh
+```
+
+后者`tieba.timer`需要详细解释：
+
+```
+[Unit]
+Description=Tieba Sign Timer
+
+[Timer]
+OnCalendar=*-*-* 12:00:00
+
+[Install]
+WantedBy=timers.target
+```
+
+Timer的名称需要是service名字后面加一个Timer，用以提高准确性。`OnCalendar`类似于`corntab`的`* * * * *`，实例中的意味每天中午12点的时候执行以下`tieba.service`中的位于`/home`文件夹的`tieba.sh`这个程序。此处的`WantedBy`是`timers.target`，指明是个定时器。
 
 
-## 8 网站环境搭建
+
+## 8 手动配置系统：以frp为例
 
 
 
-### 8.1 宝塔解人忧
 
 
 
-### 8.2 手动搭建
 
-#### 8.2.1 Apache和Nginx
-
-#### 8.2.2 PHP
-
-#### 8.2.3 MySQL和MariaDB
+## 9 网站环境搭建
 
 
 
-## 9 手动配置系统：以syncthing为例
+### 9.1 宝塔解人忧
+
+
+
+### 9.2 手动搭建
+
+#### 9.2.1 Apache和Nginx
+
+#### 9.2.2 PHP
+
+#### 9.2.3 MySQL和MariaDB
+
+
 
