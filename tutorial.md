@@ -388,9 +388,47 @@ Crontab用于定时任务，比如设定周五晚上运行脚本备份网站，�
 
 ## 6 系统权限
 
-### 6.1 root和user
+### 6.1 root和user，以及sudo
 
-### 6.2 用户组
+上述已经简单的减少了root来源，由于root的权限太高，以至于在实际使用中发现并不安全，而且作为一个初始目的是多用户多终端的操作系统，Linux主要操作都不需要发生在root用户上的。所以这里就有了user这个角色，如果用户多了起来，为了便于管理，也会把某些用户分组，就有了group的概念。以下演示使用root用户新建一个user用户并进入此用户：
+
+![adduser](images\adduser.jpg)
+
+如图所示，`adduser mjj`为新建一个叫做mjj的用户，由于此前并没有除了root之外的用户，所以会使用这个名字作为group/组的名字，并且在/home文件夹里面生成一个mjj文件夹，即mjj的”桌面“。所以输入两次密码，之后会问一堆问题，都是例行的，一路enter就好，最后会问一下信息对不对，输入y就完成添加新用户了。
+
+但此时，mjj这个用户的权限是很小的，四舍五入等于没有，连某些文件夹都不能进去更别说执行软件了。使用`su mjj`切换到mjj用户中，可以在终端中看到已经从root@rn变成了mjj@rn，rn是这台服务器的名字，即为某某在rn这台服务器上。查看以下root文件夹下有些什么东西，结果发现权限不够而被拒绝访问/Permission denied。
+
+![sudo](images\sudo.jpg)
+
+所以我们要给一个能够临时使用root权限的能力，这被称为`sudo`。
+
+```shell
+su root #切换回root账号
+apt install sudo -y #有些时候，纯净安装的Debian系统是没有sudo的，所以要安装一下
+usermod -aG sudo mjj ##给予mjj用户sudo权限
+```
+
+此时，我们再切换到mjj用户上，在刚才的命令前加上sudo，临时获取root权限，就可以查看了：
+
+![sudo_root](images\sudo_root.jpg)
+
+在用户首次使用root权限的时候，系统会提示三个准则，也请谨记：
+
+1. 尊重他人隐私
+2. 输入之前请三思
+3. 能力越大，责任越大
+
+
+
+### 6.2 chmod和chown
+
+
+
+
+
+
+
+
 
 
 
