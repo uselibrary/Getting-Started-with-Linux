@@ -79,15 +79,15 @@ Linux系统的一大优势（同时也是劣势）是默认不需要GUI，因此
 nano /etc/apt/sources.list #打开sources.list文件，在Linux系统中，#是注释符，其后的内容会被忽略
 ```
 
-![nano_ui](images\nano_ui.jpg)
+![nano_ui](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/nano_ui.jpg)
 
 如图所示，即为`nano`打开`sources.list`后的界面，最下面两行为提示，比如`Ctrl+E`为退出，如果文档本被改动了，则会出现下图，询问是否保存。如果没有被更改，则会直接退出。
 
-![nano_ctrl_e](images\nano_ctrl_e.jpg)
+![nano_ctrl_e](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/nano_ctrl_e.jpg)
 
 `Y`则保存，`N`则不保存，`Ctrl+C`取消操作。此处输入`Y`，则会如下图：
 
-![nano_yes.jpg](images\nano_yes.jpg)
+![nano_yes.jpg](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/nano_yes.jpg)
 
 此时按下`Enter`键就会保存了。
 
@@ -119,19 +119,19 @@ apt install vim -y #安装vim这个软件 -y是确认安装
 
 使用`vim /etc/apt/sources.list`打开更新源文件，如下图所示：
 
-![vim_ui](images\vim_ui.jpg)
+![vim_ui](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/vim_ui.jpg)
 
 vim功能众多，使用复杂，得慢慢说。左下角是此文件的路径和名称，右下角是光标此时的行数和列数。此时是无法直接输入，比如先按下`insert`或者`i`键变成插入模式才行。此时，左下角如下图，变成了INSERT/插入模式。
 
-![vim_s1](images\vim_s1.jpg)
+![vim_s1](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/vim_s1.jpg)
 
 然后就是该怎么写就怎么写，一些快捷键去百度谷歌必应吧，说的肯定比我详细。但是必须提到如何保存文件：`insert`模式下按`esc`键（一般是键盘最左上角，99%的人可能都不怎么用的一个键），INSERT会消失不见，如下图：
 
-![vim_s3](images\vim_s3.jpg)
+![vim_s3](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/vim_s3.jpg)
 
 这个时候再按下`:`键，界面上也会出现一个冒号，如下图。注意，这个冒号是半角的，全角冒号是没用的。
 
-![vim_s2](images\vim_s2.jpg)
+![vim_s2](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/vim_s2.jpg)
 
 这个时候，按下`wq`者两个键，即可保存内容。w是write/写入的意思，q是quit/退出的意思。如果你不想保存，则只输入q键即可，但是有时候因为文件已经被修改了，vim不让退出，这时候输入`q!`就可以了，冒号是强制执行的意思，执行后文件不会被修改并且会退出vim。
 
@@ -196,7 +196,7 @@ PuTTY：由Simon Tatham开发和维护的，老牌中的老牌，但是缺少人
 
 SSH的配置文件在`/etc/ssh/sshd_config`中，是一个纯文本文件，可以使用`nano`或者`vim`打开和编辑。打开文件后，在前几行就能看到`#Port 22`字样，这个代表使用了默认的22端口作为SSH连接使用。因为大家都在使用22端口，所以会有一些扫描机器使用弱密码不断尝试登录，使用`last`命令可以查看登录失败的记录，如下图。233333是尝试登录的账号，144.214.xxx.xxx是发起者的IP，最后面是尝试登录的时间。
 
-![ssh_lastb](images\ssh_lastb.jpg)
+![ssh_lastb](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/ssh_lastb.jpg)
 
 因此，我们可以改成高端口，比如`35261`这种没有特殊含义/排列的随机数，以减小被攻击的可能。要注意端口只能在0-65535之间，并且很多低位数的端口，已经被共识的程序占领了，比如80端口是http的，443端口是https的，就如22是SSH的一样。此处，我们修改`/etc/ssh/sshd_config`中的端口数后，还需要重启SSH服务才行，否则只会在系统下次重启后才启用新的端口。
 
@@ -216,7 +216,7 @@ systemctl restart ssh #重启SSH服务
 
 输入`ssh-keygen -t rsa `，随后一路enter键，如下图
 
-![ssh_key](images\ssh_key.jpg)
+![ssh_key](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/ssh_key.jpg)
 
 在显示完成后，在`/root/.ssh/`文件夹下，你将看到`id_rsa`和`id_rsa.pub`两个文件，id_rsa是私钥，下载下来并妥善保存，id_rsa.pub是公钥，放在服务器上的。将id_rsa.pub写入到SSH的密钥文件中：
 
@@ -258,7 +258,7 @@ PasswordAuthentication no # 不允许使用密码登陆，等测试密钥登陆�
 
 在`/`目录下，使用`ls -la`会显示出所有的文件和文件夹（如下图所示），`a`是列出所有文件，`l`是显示详细信息。
 
-![root_files](images\root_files.jpg)
+![root_files](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/root_files.jpg)
 
 第一列是文件/文件夹的权限，一共有10个字符，第一位是文件类型，比如d代表文件夹，l代表链接。之后，三个为一组，总共3组。r是读，w是写，x是执行，也可以通过数字来区分，r是1，w是2，x是4，所有有了常见的一把锁`chmod +777`。第二列是硬链接数量，即这个文件/文件夹下有多少真实放着的文件。第三列和第四列是这个件分别属于谁，以及这个人是哪个组的。这里的`组`概念来源于最开始的unix是个多用户系统，所有会把用户分类，比如某软件用户放一个组，系统维护人员放一个组等。第六列是文件/文件夹大小，默认单位是K。第七八九列是修改的日期。最后一列是文件/文件夹的名字。我们会发现有一些`->`的字样，这是指软链接。软连接类似于Windows上的快捷方式，而硬连接类似于复制了一份（但并不会真的占用空间）。
 
@@ -366,7 +366,7 @@ fi
 
 `$choice -eq 1`把刚才的`choice`这个输入变量和数字1对比，注意，要有`$`才代表变量，不然就默认是文字，`-eq`是等于的意思。判断是否等于1，是的话就给出CPU使用量，如果不等于1，那就继续判断是否等于2，是的话就给出RAM使用量，如果不等于2，那就输出错误提醒，然后结束。`grep`是抓取有关键词的那一行，`$2`是这一行的第几个内容，如下：
 
-![grep](images\grep.jpg)
+![grep](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/grep.jpg)
 
 `grep Mem`抓取到了第二行，即真实内存这一行，`$2`是内存总量，`$3`是已经使用了的内存，因此`($3/$2)*100`就是已经使用了百分之多少的内存，
 
@@ -378,11 +378,11 @@ Crontab用于定时任务，比如设定周五晚上运行脚本备份网站，�
 
 推荐`crontab -e`，其中的`-e`是指当前用户，不建议直接使用`crontab`。首次运行`crontab -e`的时候，会让选择使用何种编辑工具，这个随便，nano和vim basic都行，什么顺手和习惯就用什么。
 
-![crontab_eg](images\crontab_eg.jpg)
+![crontab_eg](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/crontab_eg.jpg)
 
 如上图，将每隔15分钟，就会使用位于`usr/bin`中的`python3`运行位于`/usr/local/weather`中的`weather.py`程序。前五个星号其实是设置的时间，推荐去https://crontab.guru/这里直接设置时间（如下图）。第一个星号是分钟，第二个星号是小时，第三个星号是天，第四个星号是月份，第五个星号是每周的第几天。
 
-![crontab_set](images\crontab_set.jpg)
+![crontab_set](https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/images/crontab_set.jpg)
 
 
 
