@@ -81,7 +81,7 @@ nano /etc/apt/sources.list #打开sources.list文件，在Linux系统中，#是�
 
 ![nano_ui](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/nano_ui.jpg)
 
-如图所示，即为`nano`打开`sources.list`后的界面，最下面两行为提示，比如`Ctrl+E`为退出，如果文档本被改动了，则会出现下图，询问是否保存。如果没有被更改，则会直接退出。
+如图所示，即为`nano`打开`sources.list`后的界面，最下面两行为提示，比如`Ctrl+E`为退出，如果文档被改动了，则会出现下图，询问是否保存。如果没有被更改，则会直接退出。
 
 ![nano_ctrl_e](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/nano_ctrl_e.jpg)
 
@@ -121,7 +121,7 @@ apt install vim -y #安装vim这个软件 -y是确认安装
 
 ![vim_ui](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/vim_ui.jpg)
 
-vim功能众多，使用复杂，得慢慢说。左下角是此文件的路径和名称，右下角是光标此时的行数和列数。此时是无法直接输入，比如先按下`insert`或者`i`键变成插入模式才行。此时，左下角如下图，变成了INSERT/插入模式。
+vim功能众多，使用复杂，得慢慢说。左下角是此文件的路径和名称，右下角是光标此时的行数和列数。此时是无法直接输入，要先按下`insert`或者`i`键变成插入模式才行。此时，左下角如下图，变成了INSERT/插入模式。
 
 ![vim_s1](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/vim_s1.jpg)
 
@@ -133,7 +133,7 @@ vim功能众多，使用复杂，得慢慢说。左下角是此文件的路径�
 
 ![vim_s2](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/vim_s2.jpg)
 
-这个时候，按下`wq`者两个键，即可保存内容。w是write/写入的意思，q是quit/退出的意思。如果你不想保存，则只输入q键即可，但是有时候因为文件已经被修改了，vim不让退出，这时候输入`q!`就可以了，冒号是强制执行的意思，执行后文件不会被修改并且会退出vim。
+这个时候，按下`wq`这两个键，即可保存内容。w是write/写入的意思，q是quit/退出的意思。如果你不想保存，则只输入q键即可，但是有时候因为文件已经被修改了，vim不让退出，这时候输入`q!`就可以了，冒号是强制执行的意思，执行后文件不会被修改并且会退出vim。
 
 
 
@@ -186,7 +186,7 @@ MobaXterm：只有英文版本，偶尔会反应慢半拍，除此之外没缺�
 
 FinalShell：国人开发，所以本地化很好，全中文，日常需要的功能也都有。有一些进阶功能需要付费，也可以云端保存SSH账号，虽然也是付费功能。缺点的话，和MobaXterm一样，JAVA写的东西，总是让人觉得慢半拍。
 
-electerm：日常所需功能都有，完全开源和免费，还可以通过GitHub实现免费的云端保存SSH账号功能，适合自己折腾和魔改。基于electron开发的，从而实现了跨平台，Windows、Mac和Linux都有客户端，不过缺点也显而易见，electron本质上是个浏览器，占内存和硬盘空间。
+electerm：日常所需功能都有，完全开源和免费，还可以通过GitHub实现免费的云端保存SSH账号功能，适合自己折腾和魔改。基于electron开发的，从而实现了跨平台，Windows、Mac和Linux都有客户端。不过缺点也显而易见，electron本质上是个浏览器，占内存和硬盘空间。
 
 PuTTY：由Simon Tatham开发和维护的，老牌中的老牌，但是缺少人性化设置，不推荐。
 
@@ -194,7 +194,7 @@ PuTTY：由Simon Tatham开发和维护的，老牌中的老牌，但是缺少人
 
 ### 2.2 SSH配置文件介绍和修改
 
-SSH的配置文件在`/etc/ssh/sshd_config`中，是一个纯文本文件，可以使用`nano`或者`vim`打开和编辑。打开文件后，在前几行就能看到`#Port 22`字样，这个代表使用了默认的22端口作为SSH连接使用。因为大家都在使用22端口，所以会有一些扫描机器使用弱密码不断尝试登录，使用`last`命令可以查看登录失败的记录，如下图。233333是尝试登录的账号，144.214.xxx.xxx是发起者的IP，最后面是尝试登录的时间。
+SSH的配置文件在`/etc/ssh/sshd_config`中，是一个纯文本文件，可以使用`nano`或者`vim`打开和编辑。打开文件后，在前几行就能看到`#Port 22`字样，这个代表使用了默认的22端口作为SSH连接使用。因为大家都在使用22端口，所以会有一些扫描机器使用弱密码不断尝试登录，使用`lastb`命令可以查看登录失败的记录，如下图。233333是尝试登录的账号，144.214.xxx.xxx是发起者的IP，最后面是尝试登录的时间。
 
 ![ssh_lastb](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/ssh_lastb.jpg)
 
