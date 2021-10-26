@@ -505,21 +505,95 @@ Timer的名称需要是service名字后面加一个Timer，用以提高准确性
 
 ## 8 手动配置系统：以frp为例
 
+frp是个内网穿透软件，可以将局域网设备通过frp服务端映射出来，实现公网服务，常见的有SSH、http/https服务等。这里以将内网设备的SSH映射到有公网IP的服务器上为例，从而不在家也能服务家里面的服务器了。
 
+在这里下载最新版的安装包 https://github.com/fatedier/frp/releases 
 
+![frp_tar](images\frp_tar.jpg)
 
+如图所示，0.38.0是版本号；后面的是系统，darwin是MacOS，freebsd是UNIX的一个分支，这里我们选择linux；紧跟着的是CPU架构，由于本次服务器的客户端是装了64位系统的树莓派4B（arm架构的CPU），所以选择`frp_0.38.0_linux_arm64.tar.gz`，而服务端是普通的VPS，所以选择`frp_0.38.0_linux_amd64.tar.gz`。
+
+**服务端配置**
+
+注意：版本号和CPU架构须按照实际情况决定。
+
+```shell
+wget https://github.com/fatedier/frp/releases/download/v0.38.0/frp_0.38.0_linux_amd64.tar.gz
+# 使用wget下载软件包
+tar -zxvf frp_0.38.0_linux_amd64.tar.gz
+# 解压下载的软件包
+cd frp_0.38.0_linux_amd64/
+# 进入解压后的文件夹
+mkdir /etc/frp/
+# 新建一个frp的文件夹
+mv frps.ini /etc/frp/frps.ini
+# 把服务器端的配置文件放到刚才新建的文件夹
+mv frps /bin/
+# 把服务器端软件放到/bin中
+mv systemd/frps.service /etc/systemd/system/frps.service
+# 放置Systemd文件
+systemctl enable frps.service
+# 设置开机自启
+systemctl start frps.service
+# 立即运行
+```
+
+**客户端配置**
+
+```shell
+wget https://github.com/fatedier/frp/releases/download/v0.38.0/frp_0.38.0_linux_arm.tar.gz
+tar -zxvf frp_0.38.0_linux_arm.tar.gz
+cd frp_0.38.0_linux_arm/
+mkdir /etc/frp/
+mv frpc.ini /etc/frp/frpc.ini
+mv frpc /bin/
+mv systemd/frpc.service /etc/systemd/system/frpc.service
+```
+
+上述与服务器配置类似，就不重复了，但需要额外修改服务端的配置文件，让它知道该和谁连接，打开`/etc/frp/frpc.ini`配置文件
+
+```
+[common]
+server_addr = 服务器ip
+server_port = 7000
+
+[raspi]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 本地服务器的SSH端口
+remote_port = 远程端口
+```
+
+其中，需要填写服务器端的IP，7000端口是握手和保活用的，默认就好了。`[raspi]`是客户端的名字，不可以重复，`local_port`是客户端的SSH端口，`remote_port`是远程的端口，此处假设是6000。
+
+```shell
+systemctl enable frpc.service
+systemctl start frpc.service
+```
+
+设置开机自启并立即运行，此时在SSH软件上，通过 `服务器IP:6000 `就可以连接到这台内网的树莓派了。
 
 
 
 ## 9 网站环境搭建
 
-
+网站搭建，说简单也简单，安装一个nginx放个html页面就算是了，但也可以做的极其复杂以至于需要一个团队，比如淘宝。这里提供了两个搭建网站的方法：面板和手动搭建。对于小白用户，还是推荐用用面板吧，不然出问题，网站被黑都不知道如何解决。
 
 ### 9.1 宝塔解人忧
+
+宝塔面板是个伪开源的一键式建站面板，国内版可以在 https://www.bt.cn/ 中找到安装方式，目前的安装命令是`wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh && bash install.sh` 。需要注意的是，国内版需要登陆并且验证手机号后才能操作，宝塔也有强制后台升级的前科。
+
+![aapanel](images\aapanel.jpg)
+
+除此之外，还有国际版的叫做aapanel，安装地址为 https://www.aapanel.com/install.html ，安装命令是`wget -O install.sh http://www.aapanel.com/script/install_6.0_en.sh && bash install.sh`。相对而言，国际版的隐私保护会更好一些，不会要求手机号等信息，但是默认语言是英文，如果会哪怕一点点英文，都推荐使用国际版的。
+
+宝塔有一点不好的地方是动辄编译（原先是在CentOS上开发的，所以有这个臭毛病），面板是python3写的，安装起来很快，但是要安装一些服务的话，如果VPS性能不好，则需要花费相当长一段时间来编译安装，普遍30分钟起步。
 
 
 
 ### 9.2 手动搭建
+
+宝塔面板是将网站搭建可视化了，本质上和手动搭建没有区别
 
 #### 9.2.1 Apache和Nginx
 
