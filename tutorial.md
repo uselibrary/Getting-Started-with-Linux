@@ -593,13 +593,37 @@ systemctl start frpc.service
 
 ### 9.2 手动搭建
 
-宝塔面板是将网站搭建可视化了，本质上和手动搭建没有区别
+宝塔面板是将网站搭建可视化了，本质上和手动搭建没有区别。这里主要是介绍常见的相关软件和Let's Encrypt配置SSL证书的方法。
 
 #### 9.2.1 Apache和Nginx
 
+Apache和Nginx都是Web服务器。前者是老牌Web服务器软件，对PHP有着优秀的支持，并且动态响应优秀，但是对性能和内存要求高。后者是俄罗斯出品，对静态网站支持良好，性能消耗也更小，反代和简单的网站都倾向于使用Nginx，甚至还有一系列基于Nginx衍生出来的版本，比如Tengine就是淘宝从Nginx衍生出来的，用以支撑淘宝的各种服务。除此之外，还有个Caddy也用的比较多，这是由golang语言写出来的，所以对多线程高并发的支持很好，并且自带SSL证书申请的功能。
+
+入门用户首选Nginx，毕竟网站没有什么服务，对VPS的性能消耗也少点。当然，选择Apache也完全可以，入门用户其实很难用到需要对比选择Apache和Nginx的时候。Caddy的话，先不推荐入门用户了。
+
+安装Apache使用以下命令
+
+```shell
+apt install apache2
+```
+
+安装Nginx使用以下命令
+
+```
+apt install nginx
+```
+
+这两个软件安装完后，都会开机自启和立刻运行，浏览器中输入`http://ip`就可以看到默认的网页，比如Nginx的是这样：
+
+![nginx](images\nginx.jpg)
+
 #### 9.2.2 PHP
 
+
+
 #### 9.2.3 MySQL和MariaDB
+
+#### 9.2.4 Let's Encrypt/SSL
 
 
 
