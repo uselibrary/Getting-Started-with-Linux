@@ -509,7 +509,7 @@ frp是个内网穿透软件，可以将局域网设备通过frp服务端映射�
 
 在这里下载最新版的安装包 https://github.com/fatedier/frp/releases 
 
-![frp_tar](images\frp_tar.jpg)
+![frp_tar](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/frp_tar.jpg)
 
 如图所示，0.38.0是版本号；后面的是系统，darwin是MacOS，freebsd是UNIX的一个分支，这里我们选择linux；紧跟着的是CPU架构，由于本次服务器的客户端是装了64位系统的树莓派4B（arm架构的CPU），所以选择`frp_0.38.0_linux_arm64.tar.gz`，而服务端是普通的VPS，所以选择`frp_0.38.0_linux_amd64.tar.gz`。
 
@@ -583,7 +583,7 @@ systemctl start frpc.service
 
 宝塔面板是个伪开源的一键式建站面板，国内版可以在 https://www.bt.cn/ 中找到安装方式，目前的安装命令是`wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh && bash install.sh` 。需要注意的是，国内版需要登陆并且验证手机号后才能操作，宝塔也有强制后台升级的前科。
 
-![aapanel](images\aapanel.jpg)
+![aapanel](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/aapanel.jpg)
 
 除此之外，还有国际版的叫做aapanel，安装地址为 https://www.aapanel.com/install.html ，安装命令是`wget -O install.sh http://www.aapanel.com/script/install_6.0_en.sh && bash install.sh`。相对而言，国际版的隐私保护会更好一些，不会要求手机号等信息，但是默认语言是英文，如果会哪怕一点点英文，都推荐使用国际版的。
 
@@ -615,11 +615,11 @@ apt install nginx
 
 这两个软件安装完后，都会开机自启和立刻运行，浏览器中输入`http://ip`就可以看到默认的网页，比如Nginx的是这样：
 
-![nginx](images\nginx.jpg)
+![nginx](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/nginx.jpg)
 
 #### 9.2.2 PHP
 
-
+安装了Nginx之后，可以实现静态网页，但是没有
 
 #### 9.2.3 MySQL和MariaDB
 
