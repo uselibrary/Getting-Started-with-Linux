@@ -619,11 +619,139 @@ apt install nginx
 
 #### 9.2.2 PHP
 
-安装了Nginx之后，可以实现静态网页，但是没有
+安装了Nginx之后，可以实现静态网页，但是常见的网站平台，比如Wordpress和typecho都是PHP写的，所以还需要安装PHP才能运行。
+
+```shell
+apt install php-fpm
+```
+
+安装完php还不算完事，还得让Nginx知道，也就是需要更改Nginx的配置文件。
+
+进入目录`/etc/nginx/sites-available/`中，将默认的文件`default`重命名为网站的域名，比如`mjj.hostloc.com`，即`mv default mjj.hostloc.com`，打开`mjj.hostloc.com`，在下述的第二行末尾加入`index.php`
+
+```
+# Add index.php to the list if you are using PHP
+index index.html index.htm index.nginx-debian.html index.php; # 注意加入了index.php
+```
+
+并且将下述的`_`改成网站域名
+
+```shell
+server_name _;
+# 改成 server_name mjj.hostloc.com;
+```
+
+随后，重新软链接，并重启Nginx
+
+```
+rm /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/mjj.hostloc.com /etc/nginx/sites-enabled/mjj.hostloc.com
+systemctl restart nginx
+```
+
+注意域名不要填错了，重启完后，Nginx将能够和PHP一起支持动态网站。
 
 #### 9.2.3 MySQL和MariaDB
 
-#### 9.2.4 Let's Encrypt/SSL
+MySQL是一个市场占有率极大的数据库软件，应用场景极其广泛，最开始是SUN公司开发的，2009年被甲骨文收购。甲骨文作恶多端，所以MySQL的一部分作者则独立出来，直接做了一个复刻版的，被命名为MariaDB，Maria是作者女儿的名字，Linux社区逐步放弃MySQL而采用MariaDB。所以在近期发布的各Linux版本中，默认是没有MySQL的，一律采用MariaDB。
+
+```
+apt install mariadb-server # 安装数据库
+mysql_secure_installation # 首次配置
+```
+
+由于是首次使用，所以在如下提示中，直接enter键就可以了，因为数据库的root用户此时并没有密码
+
+```
+NOTE: RUNNING ALL PARTS OF THIS SCRIPT IS RECOMMENDED FOR ALL MariaDB
+      SERVERS IN PRODUCTION USE!  PLEASE READ EACH STEP CAREFULLY!
+
+In order to log into MariaDB to secure it, we'll need the current
+password for the root user.  If you've just installed MariaDB, and
+you haven't set the root password yet, the password will be blank,
+so you should just press enter here.
+
+Enter current password for root (enter for none): 
+```
+
+随后，会询问是否要设置数据库的root密码，怎么说呢，反正就建个站而已（不涉及多用户多服务），有没有无所谓，我习惯性的不设置（输入N）
+
+```
+OK, successfully used password, moving on...
+
+Setting the root password ensures that nobody can log into the MariaDB
+root user without the proper authorisation.
+
+Set root password? [Y/n] N
+```
+
+现在，新建一个用户和对应的数据库
+
+```
+mysql # 进入数据库，如果有root密码，则是mysql -u root -p
+
+CREATE DATABASE name; # 新建数据库，name是数据库名字
+Query OK, 1 row affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+
+CREATE USER user@localhost; # 新建用户，user是用户名字
+Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+
+SET PASSWORD FOR user@localhost= PASSWORD("密码"); # 给用户设置一个密码
+Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+
+GRANT ALL PRIVILEGES ON name.* TO user@localhost IDENTIFIED BY '密码'; # 把name这个数据库和user这个用户关联
+Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+
+FLUSH PRIVILEGES; # 完成设置
+exit # 退出数据库
+```
+
+
+
+#### 9.2.4 Let's Encrypt，SSL/TLS
+
+http连接，由于不是加密的，所以任何人都可以查看内容，这对于一些金融服务有着巨大的危害，比如使用信用卡在网上购物的时候，账号和密码会被获知。所以网景（Firefox浏览器的前身）提出了SSL（安全套接层/Secure Sockets Layer）这个概念（后来演变升级为TLS，即传输层安全性协议/Transport Layer Security），http变成了https，电脑会内置证书，而网站也会有一个证书，只有两者相互验证成功，才能正常浏览玩网页，并且全程加密（DNS部分并不是加密的，所以有个DoH，dns over https）。
+
+SSL/TLS证书是个垄断行业，电脑内置的证书就那么几家，如果想网站被大多数浏览器/系统接受，那就只能去申请其中某家的证书，这里面层层签发转售，几近无本万利。不过好在还是有很多免费的SSL/TLS证书的，比如Let's Encrypt提供三个月的免费证书，而亚洲诚信通过第三方公司，提供一年免费的证书。这里以Let's Encrypt为例演示，相关链接为 https://certbot.eff.org/instructions ：
+
+![ssl_tls](images\ssl_tls.jpg)
+
+Let's Encrypt提供的SSL/TLS工具叫做cerbot，可以通过snap或者pip安装。snap是Ubuntu强推的一种软件部署和软件包管理系统，把所有需要的东西都放一起。pip是通过python3的pip安装，pip和snap没有功能上的区别，不想被Ubuntu强推就使用pip。
+
+**snap安装cerbot申请SSL/TLS证书**
+
+```
+apt install snapd
+snap install core
+snap refresh core
+snap install --classic certbot
+ln -s /snap/bin/certbot /usr/bin/certbot
+certbot --nginx
+```
+
+然后按照提示，输入邮箱和同意服务协议，并且在提示域名的时候，注意不要输错。
+
+**pip安装cerbot申请SSL/TLS证书**
+
+```
+apt install python3 python3-venv libaugeas0
+python3 -m venv /opt/certbot/
+/opt/certbot/bin/pip install --upgrade pip
+/opt/certbot/bin/pip install certbot certbot-nginx
+ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+certbot --nginx
+echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q" | sudo tee -a /etc/crontab > /dev/null
+```
+
+相比于snap自动每三个月更新证书，pip需要通过crontab加一个定时任务（上述最后一行），另外，也需要偶尔检查以下certbot有没有更新，即使用此命令`/opt/certbot/bin/pip install --upgrade certbot certbot-nginx`
+
+
+
+
+
+
+
+
 
 
 
