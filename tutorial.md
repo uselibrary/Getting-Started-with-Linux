@@ -133,7 +133,7 @@ vim功能众多，使用复杂，得慢慢说。左下角是此文件的路径�
 
 ![vim_s2](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/vim_s2.jpg)
 
-这个时候，按下`wq`这两个键，即可保存内容。w是write/写入的意思，q是quit/退出的意思。如果你不想保存，则只输入q键即可，但是有时候因为文件已经被修改了，vim不让退出，这时候输入`q!`就可以了，冒号是强制执行的意思，执行后文件不会被修改并且会退出vim。
+这个时候，按下`wq`这两个键，即可保存内容。w是write/写入的意思，q是quit/退出的意思。如果你不想保存，则只输入q键即可，但是有时候因为文件已经被修改了，vim不让退出，这时候输入`q!`就可以了，感叹号是强制执行的意思，执行后文件不会被修改并且会退出vim。
 
 
 
