@@ -787,9 +787,13 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 
 
-### 10.2 设置自己的Docker
+### 10.2 安装别人打包好的的Docker
 
 
+
+### 10.3 建自己的Docker
+
+Docker通过Unix socket与它的引擎进行通信，出于安全考虑，一般只有root用户和在docker组的用户才能正常访问Unix socket。所以，如果想建一个完善的Docker应用，那么建议额外新增一个用户，并加入docker用户组。
 
 
 
