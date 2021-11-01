@@ -747,9 +747,47 @@ echo "0 0,12 * * * root /opt/certbot/bin/python -c 'import random; import time; 
 
 
 
+## 10 Docker快速入门
+
+Docker的本意是“码头工人”，即搬运别人打包好的集装箱。之所以取这个名字，是因为Docker的功能与此类似：将系统和里面的应用一起打包好，别人“搬走”就能直接使用——可以将Docker粗略的理解成一个包含了系统和应用的虚拟机（严格来说，Docker是使用了沙箱机制的虚拟化容器）。常见的例子就是别人把某一个软件配置好了，用户直接下载下来，简单设置一下就可以使用了，不需要繁杂的配置过程，所以在批量服务中有着广泛的应用场景。Docker分为社区版/CE（Community Edition，免费的）和企业版/EE（Enterprise Edition，收费的），两者功能无本质区别，以下默认使用社区版。
 
 
 
+### 10.1 安装Docker环境
+
+```shell
+apt update # 同步更新源
+apt install -y ca-certificates curl gnupg lsb-release # 安装必要依赖软件
+```
+
+添加GPG密钥，注意这里和上面一样，必须是root权限（如下命令）。这里简单介绍一下GPG，全称是GnuPG，真·全称是GNU Privacy Guard，一个密码学软件，用来验证通信中的安全性，防止传输过程中被篡改，前身是Pretty Good Privacy/PGP。
+
+```
+curl -fsSL https://download.docker.com/linux/debian/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+```
+
+选择使用稳定版，如果需要nightly或者test版，可以把下面的stable改成对应的版本。
+
+```shell
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/debian $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+更新并安装Docker
+
+```shell
+apt update
+apt install -y docker-ce docker-ce-cli containerd.io
+```
+
+期间会下载几百兆的文件，网络不好的话，可能会需要一段时间，当完成安装后，使用`docker run hello-world`命令来测试功能是否正常，理论上会输出下图内容：
+
+![docker_hello](images\docker_hello.jpg)
+
+至此，系统已经安装好了Docker环境，可以自己写一个Docker的应用，或者直接拉取别人写好的为自己所用。
+
+
+
+### 10.2 设置自己的Docker
 
 
 
