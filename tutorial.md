@@ -445,7 +445,7 @@ systemctl status frps.service
 systemctl restart frps.service
 ```
 
-systemctl是systemd在系统中的程序名字，enable是指让这个程序能够开机自启，start为让程序现就运行，status是查看这个程序现在的状态，restart是程序程序。
+systemctl是systemd在系统中的程序名字，enable是指让这个程序能够开机自启，start为让程序现就运行，status是查看这个程序现在的状态，restart是重启程序。
 
 当然，我们也可以自己写systemd的service文件，这里以 https://github.com/cnsilvan/UnblockNeteaseMusic 解锁网易云音乐的程序做参考
 
