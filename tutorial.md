@@ -472,7 +472,7 @@ WantedBy=multi-user.target
 
 ### 7.2 Timer代替Crontab
 
-我写了一个自动登录百度贴吧并签到的shell脚本，想每天都运行一次帮我拿积分，但是又不想用crontab实现定时任务，那么Systemd也是由类似的功能的，名字叫做Timer，即定时器。这个功能需要两个文件，比较繁琐。
+我写了一个自动登录百度贴吧并签到的shell脚本，想每天都运行一次帮我拿积分，但是又不想用crontab实现定时任务，那么Systemd也是有类似的功能的，名字叫做Timer，即定时器。这个功能需要两个文件，比较繁琐。
 
 需要再`/etc/systemd/system/`中写两份配置文件，`tieba.service`和`tieba.timer`，前缀必须一样，后缀不同。
 
