@@ -57,6 +57,8 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 
 `touch` 新建文本文件，如`touch /home/hello.py` 将在`home` 文件夹下新建一个Python文件。
 
+`ls` 列出所有文件，但默认只是显示出最基础的文件和文件夹，如果需要更详细的信息，则使用`ls -la`，这将列出包括隐藏文件在内的所有文件和文件夹，并且给出对应的权限、大小和日期等信息。
+
 `cd` 进入指定文件夹，如`cd /home` 将进入`home`目录。返回上层目录的命令是`cd ..`，返回刚才操作的目录的命令是`cd -`。
 
 `mkdir` 新建文件夹，如`mkdir /home/Python` 将在`home` 文件夹下新建一个`Python` 文件夹。
@@ -788,6 +790,38 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 
 ### 10.2 安装别人打包好的的Docker
+
+先说一下常用的Docker命令，然后以安装Docker版本的Nextcloud为例。Nextcloud是一个开源的网盘系统，类似于私有版本的百度云，可以自己搭建从而确保数据都在自己手上而不会被8秒。
+
+#### 10.2.1 常用Docker命令
+
+`docker ps` 列出所有正在运行的容器，如果需要查看所有的容器（包括未运行或者启动失败的）则使用`docker ps -la`，这点类似于`ls`和`ls -la`的区别。
+
+`docker start/stop/restart CONTAINER ID` 开启/停止/重启特定容器，后面要加上指定的ID，CONTAINER ID见下文。
+
+`docker rm CONTAINER ID` 删除容器，如果只是删除容器的镜像，则需要把rm换成rmi
+
+
+
+#### 10.2.2 安装Docker版Nextcloud
+
+在 https://hub.docker.com/ 中直接搜索Nextcloud，找到官方版本的镜像，点击进去，在右侧有拉取镜像的命令，直接运行即可。
+
+![docker_nextcloud](images\docker_nextcloud.jpg)
+
+安装过程中会下载各个组件，等全部显示Pull conplete即表示下载完成，之后会自动校验并提示完成。
+
+![docker_pull_nextcloud](images\docker_pull_nextcloud.jpg)
+
+使用`docker run -d -p 80:80 nextcloud` 运行，此时使用`docker ps`可以查看到具体的详细信息
+
+![docker_nextcloud_status](images\docker_nextcloud_status.jpg)
+
+CONTAINER ID类似于身份证号码；IMAGE是身份证上的姓名；COMMAND是实际运行的程序；CREATED是创建的时间；STATUS是此时的运行状态；PORTS是端口，上述我们把容器的80端口定向到服务器的80，并且默认ipv4和ipv6都可以访问，接受所有IP的访问（0.0.0.0代表接受所有IP）；NAMES是容器的名字，可以理解为外号。
+
+之后就是通过IP或者绑定的域名访问，进行最后的安装。这里就能看出来Docker的优势了：用户无需了解具体操作和搭建步骤，提供者负责维护，这可以极大的简化用户的使用步骤，还可以标准化环境，无论使用Debain还是REHL，镜像/容器都是提供者给定的。
+
+![docker_nextcloud_install](images\docker_nextcloud_install.jpg)
 
 
 
