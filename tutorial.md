@@ -799,7 +799,7 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 `docker start/stop/restart CONTAINER ID` 开启/停止/重启特定容器，后面要加上指定的ID，CONTAINER ID见下文。
 
-`docker rm CONTAINER ID` 删除容器，如果只是删除容器的镜像，则需要把rm换成rmi
+`docker rm CONTAINER ID` 删除容器，如果是删除镜像，则需要把rm换成rmi
 
 
 
@@ -822,6 +822,13 @@ CONTAINER ID类似于身份证号码；IMAGE是身份证上的姓名；COMMAND�
 之后就是通过IP或者绑定的域名访问，进行最后的安装。这里就能看出来Docker的优势了：用户无需了解具体操作和搭建步骤，提供者负责维护，这可以极大的简化用户的使用步骤，还可以标准化环境，无论使用Debain还是REHL，镜像/容器都是提供者给定的。
 
 ![docker_nextcloud_install](images\docker_nextcloud_install.jpg)
+
+如果不再需要Nextcloud，则首先停止容器，随后再删除：
+
+```
+docker stop c30d348f1ef1
+docker rm c30d348f1ef1
+```
 
 
 
