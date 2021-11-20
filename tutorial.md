@@ -67,7 +67,7 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 
 `rm` 删除，即江湖传说中`rm -rf` ，`r`为递归，可以删除文件夹中的文件，`f`为强制删除。`rm /home/Python/helloworld.py` 可以删除刚才的`helloworld.py` 文件，而想删除包括`Python` 在内的所有文件，则是`rm -rf /home/Python` 。
 
-`du -lh` 查看当前文件夹下，各文件、文件夹的大大小，`l`是硬链接（软连接类似于快捷方式），`h`是让文件自动使用K/M/G显示而不是只有K。
+`du -lh` 查看当前文件夹下，各文件、文件夹的大小，`l`是硬链接（软连接类似于快捷方式），`h`是让文件自动使用K/M/G显示而不是只有K。
 
 
 
