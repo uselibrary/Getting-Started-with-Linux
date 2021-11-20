@@ -807,21 +807,21 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 在 https://hub.docker.com/ 中直接搜索Nextcloud，找到官方版本的镜像，点击进去，在右侧有拉取镜像的命令，直接运行即可。
 
-![docker_nextcloud](images\docker_nextcloud.jpg)
+![docker_nextcloud](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_nextcloud.jpg)
 
 安装过程中会下载各个组件，等全部显示Pull conplete即表示下载完成，之后会自动校验并提示完成。
 
-![docker_pull_nextcloud](images\docker_pull_nextcloud.jpg)
+![docker_pull_nextcloud](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_pull_nextcloud.jpg)
 
 使用`docker run -d -p 80:80 nextcloud` 运行，此时使用`docker ps`可以查看到具体的详细信息
 
-![docker_nextcloud_status](images\docker_nextcloud_status.jpg)
+![docker_nextcloud_status](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_nextcloud_status.jpg)
 
 CONTAINER ID类似于身份证号码；IMAGE是身份证上的姓名；COMMAND是实际运行的程序；CREATED是创建的时间；STATUS是此时的运行状态；PORTS是端口，上述我们把容器的80端口定向到服务器的80，并且默认ipv4和ipv6都可以访问，接受所有IP的访问（0.0.0.0代表接受所有IP）；NAMES是容器的名字，可以理解为外号。
 
 之后就是通过IP或者绑定的域名访问，进行最后的安装。这里就能看出来Docker的优势了：用户无需了解具体操作和搭建步骤，提供者负责维护，这可以极大的简化用户的使用步骤，还可以标准化环境，无论使用Debain还是REHL，镜像/容器都是提供者给定的。
 
-![docker_nextcloud_install](images\docker_nextcloud_install.jpg)
+![docker_nextcloud_install](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_nextcloud_install.jpg)
 
 如果不再需要Nextcloud，则首先停止容器，随后再删除：
 
