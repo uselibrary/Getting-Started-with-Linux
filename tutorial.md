@@ -1,16 +1,16 @@
  # mjj版的linux入门教程
 
+***2024年6月，第一次修订***
+
+本文的首要目的是给予Linux初学者一个简单、易学的教程，以便在看完本文后对Linux系统有一个基础的认知（而非系统级的深入），可以对常见的软件和功能进行配置，甚至可以自己写一写`shell`脚本。
+
+于2024年6月更新，采用的系统为`Debian GNU/Linux 12 (bookworm)`。
+
+~~本教程写于2021年下半年，采用的系统为`Debian GNU/Linux 11 (bullseye)`。~~
 
 
-本文的首要目的是给予Linux初学者一个简单、易学的教程，以便在看完本文后对Linux系统有一个基础的认识（而非系统级的深入），可以对常见的软件和功能进行配置，甚至可以自己写一写一键脚本。
 
-于2024年6月更新，采用的系统为Debian GNU/Linux 12 (bookworm)。
-
-~~本教程写于2021年下半年，采用的系统为Debian GNU/Linux 11 (bullseye)。~~
-
-
-
-## 0 前言吐槽CentOS
+## 0 前言吐槽CentOS和Ubuntu
 
 **解释使用Debian而不是CentOS的原因**
 
@@ -19,8 +19,22 @@
 CentOS是根据RHEL的源码重新编译的，等于换商标版本的RHEL，软件层面上，两者无本质区别。但CentOS是反人类的，至少是反入门用户的。使用RHEL的基本为商业用户，可以付费获得红帽的技术支持，或者干脆有一个自己的维护团队；而CentOS作为一个社区自发形成的操作系统，拥有陈旧的软件源/包，繁琐的配置，和对个人用户而言根本没有必要的SElinux等。举个例子，很多入门者跟随教程，在`/etc/ssh/sshd_config`中修改SSH端口时，明明所有的操作都没有问题，但是死活无法生效，最终发现是没有在SElinux里面修改放行规则。如果你想安装个软件，你就得考虑是从落后主流版本好几代的软件源/包里面安装，还是自己下载源码进行编译以获取主流的使用体验。对于入门者而言，CentOS的安全性和稳定性是个虚假的概念，毕竟让一个刚接触Linux的人去自己编译源码安装，无异于让小学生上战场，输了就说是小学生战斗力太弱。此外，因为RedHat收编CentOS，以后再也不会见到CentOS 9之类的版本了，而是CentOS Stream，这是RHEL的测试版。原先的CentOS 8也被宣布提前终止支持，CentOS 7也将在本月（2024年6月）终止支持，这意味着CentOS的未来是不确定的，不再是一个稳定的发行版。
 
 **依旧不推荐RHEL的其他衍生版，如AlmaLinux和Rocky Linux**
+
 CentOS的终止支持，让很多人开始寻找替代品，AlmaLinux和Rocky Linux是两个最受关注的替代品。AlmaLinux是由CloudLinux公司推出的，Rocky Linux是由CentOS的创始人推出的。但是，这两个发行版的目的都是为了填补CentOS消失后留下的空白，以获取稳定的RHEL体验。AlmaLinux和Rocky Linux都是基于RHEL的源代码构建的，因此它们的软件包和配置文件与RHEL基本相同。这意味着它们继承了CentOS的所有问题，包括陈旧的软件包和繁琐的配置。因此，我仍然不推荐使用这两个发行版。
 
+**为什么不推荐Ubuntu**
+
+Ubuntu是Canonical公司基于Debain发行的，以桌面应用为主的Linux发行版。通过向企业提供服务作为盈利方式，面向个人完全免费。作为一个商业公司，盈利始终是第一目的。因此，Canonical向Ubuntu中引入了一堆私货，如Snap和终端中打广告等。Snap是Canonical公司推出的一种应用打包格式，以解决缠绕Linux系统已久的依赖问题，同类型的还是有Red Hat推出的flatpak，和Simon Peter个人推出的AppImage。但是snap的性能和稳定性一直为人诟病，而很多软件都是强制安装snap版本，比如Firefox。此外，不开源也不支持镜像，下载安装速度慢，占用空间大，污染`/dev`，比如使用`lsblk`命令查看系统的磁盘使用情况，会发现挂在了一些列的`loop`，如下所示：
+```shell
+loop0    7:0    0  14.5M  1 loop /snap/gnome-logs
+loop1    7:1    0   2.3M  1 loop /snap/gnome-calculator
+loop2    7:2    0  86.6M  1 loop /snap/core
+loop3    7:3    0  86.6M  1 loop /snap/core
+loop4    7:4    0   3.3M  1 loop /snap/gnome-system-monitor 
+loop5    7:5    0    13M  1 loop /snap/gnome-characters
+```
+
+**强烈推荐Deabin**
 
 所以本文以Debian GNU/Linux（后续简称为Debian）来演示，也有着推广Debian的意思在里面，毕竟相比于Ubuntu往系统里面塞包括snap在内的一系列私货而言，Debain始终遵循着一个纯净的Linux的要求。而其他一些发行版，要么是专用性太强（如SUSE），要么是入门者不友好（如 Arch Linux），权衡之后，选择了写本文时，最新的Debian系统，即Debian GNU/Linux 12 (bookworm)。
 
@@ -30,11 +44,11 @@ CentOS的终止支持，让很多人开始寻找替代品，AlmaLinux和Rocky Li
 
 ### 1.1 系统选择与安装
 
-Debian的安装包有一系列的前缀或者后缀，例如在默认的下载地址`https://www.debian.org/download`中的是`debian-11.0.0-amd64-netinst.iso`。其中，
-- 11代表大版本是11，代号是bullseye，各版本代号都来源于电影《玩具总动员》中的角色名称；
-- amd64是指系统为64位的，i386或者x86是32位的，amd64或者x86-64是64位的，32位系统已经被逐步弃用，目前仅在特定行业中使用；
-- netinst是网络安装版本，只是个安装器，安装过程需要联网，而DVD后缀的是完整版（如：debian-11.0.0-amd64-DVD-1.iso），如果系统太大，会在DVD后面加数字，默认DVD-1是完整版本，其后数字的是软件源/包；
-- 带firmware前缀的是包含第三方非开源驱动的（如：firmware-11.1.0-amd64-DVD-1.iso），其中就包含intel和Realtek等公司的闭源网卡驱动。
+Debian的安装包有一系列的前缀或者后缀，例如在默认的下载地址`https://www.debian.org/download`中的是`debian-12.5.0-amd64-netinst.iso`。其中：
+- 12代表版本是12，5是大更新次数，代号是`bookworm`，各版本代号都来源于电影《玩具总动员》中的角色名称。只要版本号一致，使用和体验就是一致的。
+- amd64是指系统为64位的，i386或者x86是32位的，amd64或者x86-64是64位的，32位系统已经被逐步弃用，目前仅在少数特定场景中使用。
+- netinst是网络安装版本，只是个安装器，安装过程需要联网。因为系统和软件源/包过于庞大，完整版本使用标准DVD光盘容量（4.7GB）进行分盘储存。因此DVD后缀1（`DVD-1`），即第一份包含完整的系统，如：`debian-12.5.0-amd64-DVD-1.iso`。剩余数字都是软件源/包，适用于无互联网场景中。
+- Non-free Firmware，非自由固件。很多电脑使用了只提供非开源固件的硬件，比如intel和Realtek等公司的部分WiFi网卡。此前版本的Debain系统默认不提供非开源固件，但自从Debain 12开始，默认自动下载和安装第三方非开源驱动的，再也不需要使用带有非开源固件前缀的安装包了，如`firmware-11.1.0-amd64-DVD-1.iso`。
 
 
 VPS全称为virtual private server（虚拟专用服务器），如果需要安装纯净版的Debian 11系统，推荐使用vicer的Linux一键重装脚本（如下）：
