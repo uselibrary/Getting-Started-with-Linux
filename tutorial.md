@@ -62,7 +62,6 @@ bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeCl
 ###  1.2 常用的命令
 
 `cat` 用于查看文本文件的内容，如`cat /etc/os-release` 将显示系统信息，如下：
-
 ```
 PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
 NAME="Debian GNU/Linux"
@@ -75,9 +74,18 @@ SUPPORT_URL="https://www.debian.org/support"
 BUG_REPORT_URL="https://bugs.debian.org/"
 ```
 
-`touch` 新建文本文件，如`touch /home/hello.py` 将在`home` 文件夹下新建一个Python文件。
+`touch` 新建文本文件，如`touch ~/hello.py` 将在当前用户的`home`文件夹下新建一个`Python`文件。
 
-`ls` 列出所有文件，但默认只是显示出最基础的文件和文件夹，如果需要更详细的信息，则使用`ls -la`，这将列出包括隐藏文件在内的所有文件和文件夹，并且给出对应的权限、大小和日期等信息。
+`ls` 列出当前目录下的文件，但默认只是显示出最基础的文件和文件夹，如果需要更详细的信息，则使用`ls -la`，这将列出包括隐藏文件在内的所有文件和文件夹，并且给出对应的权限、大小和日期等信息。但常用的是`ls -lah`，多出来的`h`是指`human`，即以方便人类阅读的方式显示文件信息。效果依次如下：
+`ls`命令：
+```
+bin  etc  games  go  include  lib  man  sbin  share  src
+```
+`ls -lh`命令：
+
+
+
+
 
 `cd` 进入指定文件夹，如`cd /home` 将进入`home`目录。返回上层目录的命令是`cd ..`，返回刚才操作的目录的命令是`cd -`。
 
