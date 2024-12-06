@@ -4,7 +4,7 @@
 
 本文的首要目的是给予Linux初学者一个简单、易学的教程，以便在看完本文后对Linux系统有一个基础的认知（而非系统级的深入），可以对常见的软件和功能进行配置，甚至可以自己写一写`shell`脚本。
 
-于2024年6月更新，采用的系统为`Debian GNU/Linux 12 (bookworm)`。
+于2024年12月第一次更新，采用的系统为`Debian GNU/Linux 12 (bookworm)`。
 
 ~~本教程写于2021年下半年，采用的系统为`Debian GNU/Linux 11 (bullseye)`。~~
 
@@ -12,19 +12,19 @@
 
 ## 0 前言吐槽CentOS和Ubuntu
 
-**解释使用Debian而不是CentOS的原因**
+**使用Debian而不是CentOS的原因**
 
-国内首批接触Linux系统的人主要集中在科研院校，大多数是延续了Unix-like的背景，在千禧年前后才有了真正意义上的Linux使用者：纯Linux平台开发、运行服务和应用，他们或直接或间接地推广了Linux系统。红帽（Red Hat, Inc.）在1994年就开始发布了同名的操作系统：Red Hat Linux（后改组为Red Hat Enterprise Linux，缩写为RHEL）。得益于红帽优秀的团队和商业支持，RHEL这一发行版迅速占领了国内市场。彼时的国内计算机市场远不如今日繁荣，在口口相传和红帽的推广中，RHEL成为了Linux入门的主流选项，即使后来号称用户友好的Ubuntu出现了，绝大多数尝鲜的人依然能看到众多网站里面只提供RHEL版本的教程。
+国内首批接触`Linux`系统的人主要集中在科研院校，大多数是延续了`Unix-like`的背景。在千禧年前后才有了真正意义上的`Linux`使用者：使用`Linux`平台开发、运行服务和应用，他们或直接或间接地推广了`Linux`系统。红帽（Red Hat, Inc.）在1994年就开始发布了同名的操作系统：`Red Hat Linux`（后改组为R`ed Hat Enterprise Linux`，缩写为`RHEL`）。得益于红帽优秀的团队和商业支持，`RHEL`这一发行版迅速占领了国内市场。彼时的国内计算机市场远不如今日繁荣，在口口相传和红帽的推广中，`RHEL`成为了`Linux`入门的主流甚至是唯一选择，即使后来号称用户友好的`Ubuntu`出现了，在众多教程网站里面，依然优先提供`RHEL`版本的教程。
 
-CentOS是根据RHEL的源码重新编译的，等于换商标版本的RHEL，软件层面上，两者无本质区别。但CentOS是反人类的，至少是反入门用户的。使用RHEL的基本为商业用户，可以付费获得红帽的技术支持，或者干脆有一个自己的维护团队；而CentOS作为一个社区自发形成的操作系统，拥有陈旧的软件源/包，繁琐的配置，和对个人用户而言根本没有必要的SElinux等。举个例子，很多入门者跟随教程，在`/etc/ssh/sshd_config`中修改SSH端口时，明明所有的操作都没有问题，但是死活无法生效，最终发现是没有在SElinux里面修改放行规则。如果你想安装个软件，你就得考虑是从落后主流版本好几代的软件源/包里面安装，还是自己下载源码进行编译以获取主流的使用体验。对于入门者而言，CentOS的安全性和稳定性是个虚假的概念，毕竟让一个刚接触Linux的人去自己编译源码安装，无异于让小学生上战场，输了就说是小学生战斗力太弱。此外，因为RedHat收编CentOS，以后再也不会见到CentOS 9之类的版本了，而是CentOS Stream，这是RHEL的测试版。原先的CentOS 8也被宣布提前终止支持，CentOS 7也将在本月（2024年6月）终止支持，这意味着CentOS的未来是不确定的，不再是一个稳定的发行版。
+`CentOS`是根据`RHEL`的源码重新编译的，等于换商标版本的`RHEL`。软件层面上，两者无本质区别。但是，**`CentOS`是反人类的，至少是反入门用户的**。使用`RHEL`的基本为商业用户，他们可以付费获得红帽的关键技术支持，或者干脆有一个自己的维护团队。比如，阿里巴巴基于`RHEL`自己维护了`Alibaba Cloud Linux`以便自用。此外，`CentOS`作为一个社区自发形成的操作系统，拥有陈旧的软件源/包，繁琐的配置，和对个人用户而言根本没有必要的`SElinux`等。举个例子，很多入门者跟随教程，在`/etc/ssh/sshd_config`中修改SSH端口时，明明所有的操作都没有问题，但是死活无法生效，最终发现是没有在`SElinux`里面修改放行规则。如果你想安装个软件，你就得考虑是从落后主流版本好几代的软件源/包里面安装，还是自己下载源码进行编译以获取主流的使用体验。**对于入门者而言，`CentOS`的安全性和稳定性是个虚假的概念**，毕竟让一个刚接触`Linux`的人去自己编译源码安装，无异于让小学生上战场，输了就说是小学生战斗力太弱。此外，因为`RedHat`收编`CentOS`，以后再也不会见到`CentOS 9`之类的版本了，而是`CentOS Stream`，这是`RHEL`的测试版。原先的`CentOS 8`也被宣布提前终止支持，`CentOS 7`也将于2024年6月终止支持，这意味着`CentOS`的未来是不确定的，不再是一个稳定的发行版。
 
 **依旧不推荐RHEL的其他衍生版，如AlmaLinux和Rocky Linux**
 
-CentOS的终止支持，让很多人开始寻找替代品，AlmaLinux和Rocky Linux是两个最受关注的替代品。AlmaLinux是由CloudLinux公司推出的，Rocky Linux是由CentOS的创始人推出的。但是，这两个发行版的目的都是为了填补CentOS消失后留下的空白，以获取稳定的RHEL体验。AlmaLinux和Rocky Linux都是基于RHEL的源代码构建的，因此它们的软件包和配置文件与RHEL基本相同。这意味着它们继承了CentOS的所有问题，包括陈旧的软件包和繁琐的配置。因此，我仍然不推荐使用这两个发行版。
+`CentOS`的终止支持，让很多人开始寻找替代品，`AlmaLinux`和`Rocky Linux`是两个最受关注的替代品。`AlmaLinux`是由`CloudLinux`公司推出的，`Rocky Linux`是由`CentOS`的创始人推出的。但是，这两个发行版的目的都是为了填补`CentOS`消失后留下的空白，以获取稳定的`RHEL`体验。`AlmaLinux`和`Rocky Linux`都是基于`RHEL`的源代码构建的，因此它们的软件包和配置文件与`RHEL`基本相同。这意味着它们继承了`CentOS`的所有问题，包括陈旧的软件包和繁琐的配置。因此，仍然不推荐使用这两个发行版。
 
 **为什么不推荐Ubuntu**
 
-Ubuntu是Canonical公司基于Debain发行的，以桌面应用为主的Linux发行版。通过向企业提供服务作为盈利方式，面向个人完全免费。作为一个商业公司，盈利始终是第一目的。因此，Canonical向Ubuntu中引入了一堆私货，如Snap和终端中打广告等。Snap是Canonical公司推出的一种应用打包格式，以解决缠绕Linux系统已久的依赖问题，同类型的还是有Red Hat推出的flatpak，和Simon Peter个人推出的AppImage。但是snap的性能和稳定性一直为人诟病，而很多软件都是强制安装snap版本，比如Firefox。此外，不开源也不支持镜像，下载安装速度慢，占用空间大，污染`/dev`，比如使用`lsblk`命令查看系统的磁盘使用情况，会发现挂在了一些列的`loop`，如下所示：
+`Ubuntu`是`Canonical`公司基于`Debain`发行的，以桌面应用为主的`Linux`发行版。通过向企业提供服务作为盈利方式，面向个人完全免费。作为一个商业公司，盈利始终是第一目的。因此，`Canonical`向`Ubuntu`中引入了一堆私货，如`Snap`和终端中打广告等。`Snap`是`Canonical`公司推出的一种应用打包格式，以解决缠绕`Linux`系统已久的依赖问题，同类型的还是有`Red Hat`推出的`flatpak`，和`Simon Peter`个人推出的`AppImage`。但是`Snap`的性能和稳定性一直为人诟病。从`Ubuntu 24.04`开始，很多软件都是强制安装`Snap`版本，哪怕是使用`apt`执行安装命令，系统也会强制接管并使用`Snap`，比如`Firefox`浏览器。此外，既不开源`Snap`构建也不支持镜像加速，导致程序黑盒、下载安装速度慢、占用空间大，以及污染`/dev`，比如使用`lsblk`命令查看系统的磁盘使用情况，会发现挂在了一些列的`loop`，如下所示：
 ```shell
 loop0    7:0    0  14.5M  1 loop /snap/gnome-logs
 loop1    7:1    0   2.3M  1 loop /snap/gnome-calculator
@@ -44,11 +44,11 @@ loop5    7:5    0    13M  1 loop /snap/gnome-characters
 
 ### 1.1 系统选择与安装
 
-Debian的安装包有一系列的前缀或者后缀，例如在默认的下载地址`https://www.debian.org/download`中的是`debian-12.5.0-amd64-netinst.iso`。其中：
+`Debian`的安装包有一系列的前缀或者后缀，例如在默认的下载地址`https://www.debian.org/download`中的是`debian-12.5.0-amd64-netinst.iso`。其中：
 - 12代表版本是12，5是大更新次数，代号是`bookworm`，各版本代号都来源于电影《玩具总动员》中的角色名称。只要版本号一致，使用和体验就是一致的。
-- amd64是指系统为64位的，i386或者x86是32位的，amd64或者x86-64是64位的，32位系统已经被逐步弃用，目前仅在少数特定场景中使用。
-- netinst是网络安装版本，只是个安装器，安装过程需要联网。因为系统和软件源/包过于庞大，完整版本使用标准DVD光盘容量（4.7GB）进行分盘储存。因此DVD后缀1（`DVD-1`），即第一份包含完整的系统，如：`debian-12.5.0-amd64-DVD-1.iso`。剩余数字都是软件源/包，适用于无互联网场景中。
-- Non-free Firmware，非自由固件。很多电脑使用了只提供非开源固件的硬件，比如intel和Realtek等公司的部分WiFi网卡。此前版本的Debain系统默认不提供非开源固件，但自从Debain 12开始，默认自动下载和安装第三方非开源驱动的，再也不需要使用带有非开源固件前缀的安装包了，如`firmware-11.1.0-amd64-DVD-1.iso`。
+- `amd64`是指系统为64位的，`i386`是32位的；`amd64`又称为`x86-64`，`i386`又称为`x86`。目前，32位系统已经被逐步弃用，仅在少数特定场景中使用。
+- `netinst`是网络安装版本，只是个安装器，安装过程需要联网。由于系统和软件源/包过于庞大，完整版本使用标准DVD光盘容量（4.7GB）进行分盘储存。DVD后缀1（`DVD-1`），即第一份包含完整的系统，如：`debian-12.5.0-amd64-DVD-1.iso`。剩余数字都是软件源/包，适用于无互联网场景中。
+- `Non-free Firmware`，非自由固件。很多电脑使用了只提供非开源固件的硬件，比如`Realtek`等公司的部分`WiFi`网卡。此前版本的`Debain`系统默认不提供非开源固件，但自从`Debain 12`开始，默认自动下载和安装第三方非开源驱动的，再也不需要使用带有非开源固件前缀的安装包了，比如`firmware-11.1.0-amd64-DVD-1.iso`这类安装包也消失了。
 
 
 VPS全称为virtual private server（虚拟专用服务器），如果需要安装纯净版的Debian 11系统，推荐使用vicer的Linux一键重装脚本（如下）：
@@ -64,11 +64,11 @@ bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeCl
 `cat` 用于查看文本文件的内容，如`cat /etc/os-release` 将显示系统信息，如下：
 
 ```
-PRETTY_NAME="Debian GNU/Linux 11 (bullseye)"
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
 NAME="Debian GNU/Linux"
-VERSION_ID="11"
-VERSION="11 (bullseye)"
-VERSION_CODENAME=bullseye
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
 ID=debian
 HOME_URL="https://www.debian.org/"
 SUPPORT_URL="https://www.debian.org/support"
