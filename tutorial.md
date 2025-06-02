@@ -2,10 +2,11 @@
 
 ***2024年12月，第一次修订***
 
-本文的首要目的是给予Linux初学者一个简单、易学的教程，以便在看完本文后对Linux系统有一个基础的认知（而非系统级的深入），可以对常见的软件和功能进行配置，甚至可以自己写一写`shell`脚本。
+本文的首要目的是给予Linux初学者一个简单、易学的教程，以便在看完本文后对Linux系统有一个基础的认识（而非系统级的深入），可以对常见的软件和功能进行配置，甚至可以自己写一写`shell`脚本。
 
+
+于2025年6月第二次更新，修复此前typo和陈旧内容，为`Debian GNU/Linux 13 (trixie)`的推出做准备。
 于2024年12月第一次更新，采用的系统为`Debian GNU/Linux 12 (bookworm)`。
-
 ~~本教程写于2021年下半年，采用的系统为`Debian GNU/Linux 11 (bullseye)`。~~
 
 
@@ -14,9 +15,9 @@
 
 **使用Debian而不是CentOS的原因**
 
-国内首批接触`Linux`系统的人主要集中在科研院校，大多数是延续了`Unix-like`的背景。在千禧年前后才有了真正意义上的`Linux`使用者：使用`Linux`平台开发、运行服务和应用，他们或直接或间接地推广了`Linux`系统。红帽（Red Hat, Inc.）在1994年就开始发布了同名的操作系统：`Red Hat Linux`（后改组为R`ed Hat Enterprise Linux`，缩写为`RHEL`）。得益于红帽优秀的团队和商业支持，`RHEL`这一发行版迅速占领了国内市场。彼时的国内计算机市场远不如今日繁荣，在口口相传和红帽的推广中，`RHEL`成为了`Linux`入门的主流甚至是唯一选择，即使后来号称用户友好的`Ubuntu`出现了，在众多教程网站里面，依然优先提供`RHEL`版本的教程。
+国内首批接触`Linux`系统的人主要集中在科研院校，大多数是延续了`Unix-like`的背景。在千禧年前后才有了真正意义上的`Linux`使用者：使用`Linux`平台开发、运行服务和应用，他们或直接或间接地推广了`Linux`系统。红帽（Red Hat, Inc.）在1994年就开始发布了同名的操作系统：`Red Hat Linux`（后改组为`Red Hat Enterprise Linux`，缩写为`RHEL`）。得益于红帽优秀的团队和商业支持，`RHEL`这一发行版迅速占领了国内市场。彼时的国内计算机市场远不如今日繁荣，在口口相传和红帽的推广中，`RHEL`成为了`Linux`入门的主流甚至是唯一选择，即使后来号称用户友好的`Ubuntu`出现了，在众多教程网站里面，依然优先提供`RHEL`版本的教程。
 
-`CentOS`是根据`RHEL`的源码重新编译的，等于换商标版本的`RHEL`。软件层面上，两者无本质区别。但是，**`CentOS`是反人类的，至少是反入门用户的**。使用`RHEL`的基本为商业用户，他们可以付费获得红帽的关键技术支持，或者干脆有一个自己的维护团队。比如，阿里巴巴基于`RHEL`自己维护了`Alibaba Cloud Linux`以便自用。此外，`CentOS`作为一个社区自发形成的操作系统，拥有陈旧的软件源/包，繁琐的配置，和对个人用户而言根本没有必要的`SElinux`等。举个例子，很多入门者跟随教程，在`/etc/ssh/sshd_config`中修改SSH端口时，明明所有的操作都没有问题，但是死活无法生效，最终发现是没有在`SElinux`里面修改放行规则。如果你想安装个软件，你就得考虑是从落后主流版本好几代的软件源/包里面安装，还是自己下载源码进行编译以获取主流的使用体验。**对于入门者而言，`CentOS`的安全性和稳定性是个虚假的概念**，毕竟让一个刚接触`Linux`的人去自己编译源码安装，无异于让小学生上战场，输了就说是小学生战斗力太弱。此外，因为`RedHat`收编`CentOS`，以后再也不会见到`CentOS 9`之类的版本了，而是`CentOS Stream`，这是`RHEL`的测试版。原先的`CentOS 8`也被宣布提前终止支持，`CentOS 7`也将于2024年6月终止支持，这意味着`CentOS`的未来是不确定的，不再是一个稳定的发行版。
+`CentOS`是根据`RHEL`的源码重新编译的，等于换商标版本的`RHEL`。软件层面上，两者无本质区别。但是，**`CentOS`是反人类的，至少是反入门用户的**。使用`RHEL`的基本为商业用户，他们可以付费获得红帽的关键技术支持，或者干脆有一个自己的维护团队。比如，阿里巴巴基于`RHEL`自己维护了`Alibaba Cloud Linux`以便自用。此外，`CentOS`作为一个社区自发形成的操作系统，拥有陈旧的软件源/包，繁琐的配置，和对个人用户而言根本没有必要的`SElinux`等。举个例子，很多入门者跟随教程，在`/etc/ssh/sshd_config`中修改SSH端口时，明明所有的操作都没有问题，但是死活无法生效，最终发现是没有在`SElinux`里面修改放行规则。如果你想安装个软件，你就得考虑是从落后主流版本好几代的软件源/包里面安装，还是自己下载源码进行编译以获取主流的使用体验。**对于入门者而言，`CentOS`的安全性和稳定性是个虚假的概念**，毕竟让一个刚接触`Linux`的人去自己编译源码安装，无异于让小学生上战场，输了就说是小学生战斗力太弱。此外，因为`RedHat`收编`CentOS`，以后再也不会见到`CentOS 9`之类的版本了，而是`CentOS Stream`，这是`RHEL`的测试版。原先的`CentOS 8`也被宣布提前终止支持，`CentOS 7`也已于2024年6月终止支持，这意味着`CentOS`的未来是不确定的，不再是一个稳定的发行版。
 
 **依旧不推荐RHEL的其他衍生版，如AlmaLinux和Rocky Linux**
 
@@ -34,9 +35,9 @@ loop4    7:4    0   3.3M  1 loop /snap/gnome-system-monitor
 loop5    7:5    0    13M  1 loop /snap/gnome-characters
 ```
 
-**强烈推荐Deabin**
+**强烈推荐Debian**
 
-所以本文以Debian GNU/Linux（后续简称为Debian）来演示，也有着推广Debian的意思在里面，毕竟相比于Ubuntu往系统里面塞包括snap在内的一系列私货而言，Debain始终遵循着一个纯净的Linux的要求。而其他一些发行版，要么是专用性太强（如SUSE），要么是入门者不友好（如 Arch Linux），权衡之后，选择了写本文时，最新的Debian系统，即Debian GNU/Linux 12 (bookworm)。
+所以本文以Debian GNU/Linux（后续简称为Debian）来演示，也有着推广Debian的意思在里面，毕竟相比于Ubuntu往系统里面塞包括snap在内的一系列私货而言，Debian始终遵循着一个纯净的Linux的要求。而其他一些发行版，要么是专用性太强（如SUSE），要么是入门者不友好（如 Arch Linux），权衡之后，选择了写本文时，最新的Debian系统，即Debian GNU/Linux 12 (bookworm)。
 
 
 
@@ -51,10 +52,10 @@ loop5    7:5    0    13M  1 loop /snap/gnome-characters
 - `Non-free Firmware`，非自由固件。很多电脑使用了只提供非开源固件的硬件，比如`Realtek`等公司的部分`WiFi`网卡。此前版本的`Debain`系统默认不提供非开源固件，但自从`Debain 12`开始，默认自动下载和安装第三方非开源驱动的，再也不需要使用带有非开源固件前缀的安装包了，比如`firmware-11.1.0-amd64-DVD-1.iso`这类安装包也消失了。
 
 
-VPS全称为virtual private server（虚拟专用服务器），如果需要安装纯净版的Debian 11系统，推荐使用vicer的Linux一键重装脚本（如下）：
+VPS全称为virtual private server（虚拟专用服务器），如果需要安装纯净版的Debian 12系统，推荐使用vicer的Linux一键重装脚本（如下）：
 
 ```shell
-bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 11 -v 64 -p "自定义root密码" -port "自定义ssh端口"
+bash <(wget --no-check-certificate -qO- 'https://raw.githubusercontent.com/MoeClub/Note/master/InstallNET.sh') -d 12 -v 64 -p "自定义root密码" -port "自定义ssh端口"
 ```
 
 
@@ -82,6 +83,18 @@ BUG_REPORT_URL="https://bugs.debian.org/"
 bin  etc  games  go  include  lib  man  sbin  share  src
 ```
 `ls -lh`命令：
+```
+total 48K
+drwxr-xr-x  2 root root 4.0K Mar 15 10:30 bin
+drwxr-xr-x  3 root root 4.0K Mar 15 10:25 etc
+drwxr-xr-x  2 root root 4.0K Mar 15 10:25 games
+drwxr-xr-x  3 root root 4.0K Mar 15 10:25 include
+drwxr-xr-x  8 root root 4.0K Mar 15 10:30 lib
+drwxr-xr-x  2 root root 4.0K Mar 15 10:25 man
+drwxr-xr-x  2 root root 4.0K Mar 15 10:25 sbin
+drwxr-xr-x 15 root root 4.0K Mar 15 10:30 share
+drwxr-xr-x  2 root root 4.0K Mar 15 10:25 src
+```
 
 
 
@@ -93,17 +106,17 @@ bin  etc  games  go  include  lib  man  sbin  share  src
 
 `mv` 移动文件和文件夹，也可以用来修改名称，如`mv /home/hello.py /home/helloworld.py` 将上文的`hello.py`重命名为`helloworld.py`，`mv /home/helloworld.py /home/Python/helloworld.py` 将`helloworld.py` 由`home`文件夹移动到了次级的`Python`文件夹。
 
-`cp` 复制文件，`cp /home/Python/hellowrold.py /home/Python/HelloWorld.py` 将`helloworld.py`复制为`HelloWolrd.py`。注意：Linux系统严格区分大小写，`helloworld.py`和`HelloWolrd.py`是两个文件。如果想复制整个文件夹，则需要带`r`，即`cp -r`，但此命令无法复制隐藏文件夹，需要使用`cp -r pathA/. pathB` 注意这个点`.`是灵魂。
+`cp` 复制文件，`cp /home/Python/helloworld.py /home/Python/HelloWorld.py` 将`helloworld.py`复制为`HelloWorld.py`。注意：Linux系统严格区分大小写，`helloworld.py`和`HelloWorld.py`是两个文件。如果想复制整个文件夹，则需要带`r`，即`cp -r`，但此命令无法复制隐藏文件夹，需要使用`cp -r pathA/. pathB` 注意这个点`.`是灵魂。
 
 `rm` 删除，即江湖传说中`rm -rf` ，`r`为递归，可以删除文件夹中的文件，`f`为强制删除。`rm /home/Python/helloworld.py` 可以删除刚才的`helloworld.py` 文件，而想删除包括`Python` 在内的所有文件，则是`rm -rf /home/Python` 。
 
-`du -lh` 查看当前文件夹下，各文件、文件夹的大小，`l`是硬链接（软连接类似于快捷方式），`h`是让文件自动使用K/M/G显示而不是只有K。
+`du -sh` 查看当前文件夹下，各文件、文件夹的大小，`s`是汇总显示，`h`是让文件自动使用K/M/G显示而不是只有字节。
 
 
 
 ### 1.3 基础文本编辑器nano、vim
 
-Linux系统的一大优势（同时也是劣势）是默认不需要GUI，因此节省了大量的性能开支，无GUI版本的Debian 11可以在512M甚至更小内存的VPS上正常启动和运行。但缺少GUI加大了入门者修改文件的难度，所幸Debian 11自带了简便易用的nano文本编辑器。以下以修改系统的更新源为例
+Linux系统的一大优势（同时也是劣势）是默认不需要GUI，因此节省了大量的性能开支，无GUI版本的Debian 12可以在512M甚至更小内存的VPS上正常启动和运行。但缺少GUI加大了入门者修改文件的难度，所幸Debian 12自带了简便易用的nano文本编辑器。以下以修改系统的更新源为例
 
 ```shell
 nano /etc/apt/sources.list #打开sources.list文件，在Linux系统中，#是注释符，其后的内容会被忽略
@@ -117,26 +130,26 @@ nano /etc/apt/sources.list #打开sources.list文件，在Linux系统中，#是�
 
 `Y`则保存，`N`则不保存，`Ctrl+C`取消操作。此处输入`Y`，则会如下图：
 
-![nano_yes.jpg](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/nano_yes.jpg)
+![nano_yes](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/nano_yes.jpg)
 
 此时按下`Enter`键就会保存了。
 
 
 
-这里多提一句关于Debian 11的更新源内容，一般是以下6行。
+这里多提一句关于Debian 12的更新源内容，一般是以下6行。
 
 ```shell
-deb http://deb.debian.org/debian bullseye main contrib non-free
-deb-src http://deb.debian.org/debian bullseye main contrib non-free
+deb http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm main contrib non-free non-free-firmware
 
-deb http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
-deb-src http://deb.debian.org/debian-security/ bullseye-security main contrib non-free
+deb http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian-security/ bookworm-security main contrib non-free non-free-firmware
 
-deb http://deb.debian.org/debian bullseye-updates main contrib non-free
-deb-src http://deb.debian.org/debian bullseye-updates main contrib non-free
+deb http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+deb-src http://deb.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
 ```
 
-deb表示为已经编译好的安装包，类似于Windows上的MSI安装包，deb-src是源文件，万一没有打包好，提供自己本地编译安装的机会。总共分三大行，第一行是系统主文件，第二行是安全性更新，第三个是一些更新补充，推荐三个都写上。在每行的末尾都有`main contrib non-free`字样，其中`main`是官方给的包/源，严格遵守相关开源协议；`contrib`是包/源本身遵守相关开源协议，但是它们的依赖则不是；`non-free`是私有的软件，比如上文提到的Realtek的WiFi驱动等。除此之外，其实还有个`Backports`作为第四大行，是将比较陈旧的软件移植过来的，很少会用到，一般默认不写上。
+deb表示为已经编译好的安装包，类似于Windows上的MSI安装包，deb-src是源文件，万一没有打包好，提供自己本地编译安装的机会。总共分三大行，第一行是系统主文件，第二行是安全性更新，第三个是一些更新补充，推荐三个都写上。在每行的末尾都有`main contrib non-free non-free-firmware`字样，其中`main`是官方给的包/源，严格遵守相关开源协议；`contrib`是包/源本身遵守相关开源协议，但是它们的依赖则不是；`non-free`是私有的软件，比如上文提到的Realtek的WiFi驱动等；`non-free-firmware`是Debian 12新增的，专门用于非自由固件。除此之外，其实还有个`Backports`作为第四大行，是将比较陈旧的软件移植过来的，很少会用到，一般默认不写上。
 
 
 
@@ -186,7 +199,7 @@ apt remove vim -y
 apt purge vim -y
 ```
 
-第一个会址卸载vim软件本身，配置文件仍然会本留下；第二种连带着配置文件和相关依赖一起卸载了，所以存在一定风险。除此之外，`apt autoremove`是对整个系统进行整理，将不需要的依赖卸载了，不针对于特定软件。
+第一个会仅卸载vim软件本身，配置文件仍然会保留下；第二种连带着配置文件和相关依赖一起卸载了，所以存在一定风险。除此之外，`apt autoremove`是对整个系统进行整理，将不需要的依赖卸载了，不针对于特定软件。
 
 
 
@@ -196,7 +209,7 @@ apt purge vim -y
 
 ### 2.1 连接SSH的软件和相关操作
 
-SSH软件有开源的和不开源的，有付费的和免费的，整理了一个常见SSH客户端（Windows平台）的对比表格和相关信息。其实在2021年，macos、Linux和windows 10都自带SSH功能，这里先不讨论。个人目前主用mobaxterm，偶尔使用xshell。
+SSH软件有开源的和不开源的，有付费的和免费的，整理了一个常见SSH客户端（Windows平台）的对比表格和相关信息。其实在2021年，macOS、Linux和Windows 10都自带SSH功能，这里先不讨论。个人目前主要使用MobaXterm，偶尔使用Xshell。
 
 
 
@@ -346,7 +359,7 @@ umount /mnt/usb
 ```shell
 #!/bin/bash
 
-echo "which useage do you want to konw?"
+echo "which usage do you want to know?"
 echo "1 for CPU, 2 for RAM"
 read choice
 
@@ -367,16 +380,16 @@ fi
 
 `#!/bin/bash`是指定此文件由/bin下面的bash这个程序来执行。
 
-在Debian 11里面，bash其实是dash，别问dash是什么，就写bash，天王老子来了也写bash。Bash全称是GNU Bourne-Again Shell，bash被从NetBSD（一个Unix的分支）上移植到Debian上，所以叫dash (Debian Almquist Shell)。
+在Debian 12里面，bash其实是dash，别问dash是什么，就写bash，天王老子来了也写bash。Bash全称是GNU Bourne-Again Shell，bash被从NetBSD（一个Unix的分支）上移植到Debian上，所以叫dash (Debian Almquist Shell)。
 
-`echo "which useage do you want to konw?"`是输出冒号内的文字
+`echo "which usage do you want to know?"`是输出引号内的文字
 
 ````
 echo "1 for CPU, 2 for RAM"
 read choice
 ````
 
-把输入内容赋值给`choice`这个变量，即数字1或者2。`rcho -p "1 for CPU, 2 for RAM" choice`也可以实现相同功能。
+把输入内容赋值给`choice`这个变量，即数字1或者2。`echo -p "1 for CPU, 2 for RAM" choice`也可以实现相同功能。
 
 ```
 if [ ... ]
@@ -410,7 +423,7 @@ Crontab用于定时任务，比如设定周五晚上运行脚本备份网站，�
 
 ![crontab_eg](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/crontab_eg.jpg)
 
-如上图，将每隔15分钟，就会使用位于`usr/bin`中的`python3`运行位于`/usr/local/weather`中的`weather.py`程序。前五个星号其实是设置的时间，推荐去 https://crontab.guru/ 这里直接设置时间（如下图）。第一个星号是分钟，第二个星号是小时，第三个星号是天，第四个星号是月份，第五个星号是每周的第几天。
+如上图，将每隔15分钟，就会使用位于`/usr/bin`中的`python3`运行位于`/usr/local/weather`中的`weather.py`程序。前五个星号其实是设置的时间，推荐去 https://crontab.guru/ 这里直接设置时间（如下图）。第一个星号是分钟，第二个星号是小时，第三个星号是天，第四个星号是月份，第五个星号是每周的第几天。
 
 ![crontab_set](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/crontab_set.jpg)
 
@@ -529,7 +542,7 @@ OnCalendar=*-*-* 12:00:00
 WantedBy=timers.target
 ```
 
-Timer的名称需要是service名字后面加一个Timer，用以提高准确性。`OnCalendar`类似于`corntab`的`* * * * *`，实例中的意味每天中午12点的时候执行以下`tieba.service`中的位于`/home`文件夹的`tieba.sh`这个程序。此处的`WantedBy`是`timers.target`，指明是个定时器。
+Timer的名称需要是service名字后面加一个Timer，用以提高准确性。`OnCalendar`类似于`crontab`的`* * * * *`，实例中的意味每天中午12点的时候执行一下`tieba.service`中的位于`/home`文件夹的`tieba.sh`这个程序。此处的`WantedBy`是`timers.target`，指明是个定时器。
 
 
 
@@ -541,18 +554,18 @@ frp是个内网穿透软件，可以将局域网设备通过frp服务端映射�
 
 ![frp_tar](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/frp_tar.jpg)
 
-如图所示，0.38.0是版本号；后面的是系统，darwin是MacOS，freebsd是UNIX的一个分支，这里我们选择linux；紧跟着的是CPU架构，由于本次服务器的客户端是装了64位系统的树莓派4B（arm架构的CPU），所以选择`frp_0.38.0_linux_arm64.tar.gz`，而服务端是普通的VPS，所以选择`frp_0.38.0_linux_amd64.tar.gz`。
+如图所示，0.62.1是版本号；后面的是系统，darwin是MacOS，freebsd是UNIX的一个分支，这里我们选择linux；紧跟着的是CPU架构，由于本次服务器的客户端是装了64位系统的树莓派4B（arm架构的CPU），所以选择`frp_0.62.1_linux_arm64.tar.gz`，而服务端是普通的VPS，所以选择`frp_0.62.1_linux_amd64.tar.gz`。
 
 **服务端配置**
 
 注意：版本号和CPU架构须按照实际情况决定。
 
 ```shell
-wget https://github.com/fatedier/frp/releases/download/v0.38.0/frp_0.38.0_linux_amd64.tar.gz
+wget https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_amd64.tar.gz
 # 使用wget下载软件包
-tar -zxvf frp_0.38.0_linux_amd64.tar.gz
+tar -zxvf frp_0.62.1_linux_amd64.tar.gz
 # 解压下载的软件包
-cd frp_0.38.0_linux_amd64/
+cd frp_0.62.1_linux_amd64/
 # 进入解压后的文件夹
 mkdir /etc/frp/
 # 新建一个frp的文件夹
@@ -571,9 +584,9 @@ systemctl start frps.service
 **客户端配置**
 
 ```shell
-wget https://github.com/fatedier/frp/releases/download/v0.38.0/frp_0.38.0_linux_arm.tar.gz
-tar -zxvf frp_0.38.0_linux_arm.tar.gz
-cd frp_0.38.0_linux_arm/
+wget https://github.com/fatedier/frp/releases/download/v0.62.1/frp_0.62.1_linux_arm64.tar.gz
+tar -zxvf frp_0.62.1_linux_arm64.tar.gz
+cd frp_0.62.1_linux_arm64/
 mkdir /etc/frp/
 mv frpc.ini /etc/frp/frpc.ini
 mv frpc /bin/
@@ -721,16 +734,16 @@ Set root password? [Y/n] N
 mysql # 进入数据库，如果有root密码，则是mysql -u root -p
 
 CREATE DATABASE name; # 新建数据库，name是数据库名字
-Query OK, 1 row affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+Query OK, 1 row affected (0.00 sec) #此段为MySQL反馈提示，不需要输入。
 
 CREATE USER user@localhost; # 新建用户，user是用户名字
-Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+Query OK, 0 rows affected (0.00 sec) #此段为MySQL反馈提示，不需要输入。
 
 SET PASSWORD FOR user@localhost= PASSWORD("密码"); # 给用户设置一个密码
-Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+Query OK, 0 rows affected (0.00 sec) #此段为MySQL反馈提示，不需要输入。
 
 GRANT ALL PRIVILEGES ON name.* TO user@localhost IDENTIFIED BY '密码'; # 把name这个数据库和user这个用户关联
-Query OK, 0 rows affected (0.00 sec) #此段为mySQL反馈提示，不需要输入。
+Query OK, 0 rows affected (0.00 sec) #此段为MySQL反馈提示，不需要输入。
 
 FLUSH PRIVILEGES; # 完成设置
 exit # 退出数据库
@@ -819,7 +832,7 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 ### 10.2 安装别人打包好的的Docker
 
-先说一下常用的Docker命令，然后以安装Docker版本的Nextcloud为例。Nextcloud是一个开源的网盘系统，类似于私有版本的百度云，可以自己搭建从而确保数据都在自己手上而不会被8秒。
+先说一下常用的Docker命令，然后以安装Docker版本的Nextcloud为例。Nextcloud是一个开源的网盘系统，类似于私有版本的百度云，可以自己搭建从而确保数据都在自己手上而不会被和谐。
 
 #### 10.2.1 常用Docker命令
 
@@ -837,7 +850,7 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 ![docker_nextcloud](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_nextcloud.jpg)
 
-安装过程中会下载各个组件，等全部显示Pull conplete即表示下载完成，之后会自动校验并提示完成。
+安装过程中会下载各个组件，等全部显示Pull complete即表示下载完成，之后会自动校验并提示完成。
 
 ![docker_pull_nextcloud](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_pull_nextcloud.jpg)
 
@@ -847,7 +860,7 @@ apt install -y docker-ce docker-ce-cli containerd.io
 
 CONTAINER ID类似于身份证号码；IMAGE是身份证上的姓名；COMMAND是实际运行的程序；CREATED是创建的时间；STATUS是此时的运行状态；PORTS是端口，上述我们把容器的80端口定向到服务器的80，并且默认ipv4和ipv6都可以访问，接受所有IP的访问（0.0.0.0代表接受所有IP）；NAMES是容器的名字，可以理解为外号。
 
-之后就是通过IP或者绑定的域名访问，进行最后的安装。这里就能看出来Docker的优势了：用户无需了解具体操作和搭建步骤，提供者负责维护，这可以极大的简化用户的使用步骤，还可以标准化环境，无论使用Debain还是REHL，镜像/容器都是提供者给定的。
+之后就是通过IP或者绑定的域名访问，进行最后的安装。这里就能看出来Docker的优势了：用户无需了解具体操作和搭建步骤，提供者负责维护，这可以极大的简化用户的使用步骤，还可以标准化环境，无论使用Debian还是RHEL，镜像/容器都是提供者给定的。
 
 ![docker_nextcloud_install](https://raw.githubusercontent.com/uselibrary/Getting-Started-with-Linux/main/images/docker_nextcloud_install.jpg)
 

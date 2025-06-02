@@ -4,7 +4,9 @@
 
 时间和精力有限，有些内容没有写，其中也肯定有不少错误的地方。如果需要什么内容或提出补充和纠错，可以直接在GitHub上或者我的网站 (https://pa.ci/157.html) 中发言，如果有时间会添加进去，也欢迎PR来增加内容。
 
-本教程写于2021年下半年，采用的系统为Debian GNU/Linux 11 (bullseye)。
+本教程写于2021年下半年，2024年12月进行第一次大幅更新，采用的系统为Debian GNU/Linux 12 (bookworm)。
+
+~~本教程写于2021年下半年，采用的系统为Debian GNU/Linux 11 (bullseye)。~~
 
 
 
@@ -18,7 +20,7 @@ https://github.com/uselibrary/Getting-Started-with-Linux/blob/main/tutorial.md
 - 0 前言吐槽CentOS
 - 1 环境搭建
   - 1.1 系统选择与安装
-  - 1.2 常见的命令
+  - 1.2 常用的命令
   - 1.3 基础文本编辑器nano、vim
   - 1.4 更新系统
 - 2 SSH链接和基础配置
